@@ -1,0 +1,14 @@
+@import './shared/sharedScss/vars.scss';
+
+.main-div {
+    background: linear-gradient(160deg, #02acef 50%, #586ae2 85%);
+    height: 1000px;
+    width: 100%;
+    padding-top: 3rem;
+
+    ::selection {
+        background-color: $main-light-blue-color;
+        color: $main-white-color;
+    }
+
+}

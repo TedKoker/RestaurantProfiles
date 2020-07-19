@@ -1,0 +1,60 @@
+@import '../shared/sharedScss/vars.scss';
+
+.navbar-light {
+    background-color: $main-white-color;
+    
+    ::selection {
+        background-color: $main-light-blue-color;
+        color: $main-white-color;
+    }
+    .brand {
+        cursor: default;
+        display: flex;
+        flex-direction: column;
+        color: $main-black-color;
+        h4 {
+            margin-bottom: 0;
+        }
+        h6 {
+            font-size: 1.1rem;
+            margin-left: auto;
+            margin-right: -1.3rem;
+        }
+    }
+
+    .navbar-collapse {
+        .navbar-nav {
+            a {
+                color: $main-dark-grey;
+            }
+        }
+    }
+
+    .navbar-toggler {
+        border: none;
+        &:focus {
+            outline: none;
+        }
+        &.collapsed {
+            div {
+                span {
+                    &:first-of-type {
+                        margin-top: .4rem !important;
+                    }
+                    &:last-of-type {
+                        margin-top: -.4rem !important;
+                    }
+                    &:nth-of-type(2) {
+                       margin-top: -.01rem !important;
+                    }
+                }
+            }
+        }
+
+        div {
+            span {
+                background-color: $main-dark-grey !important;
+            }
+        }
+    }
+}

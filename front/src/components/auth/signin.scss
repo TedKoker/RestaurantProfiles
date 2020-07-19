@@ -1,0 +1,47 @@
+@import '../../shared/sharedScss/vars.scss';
+
+.card {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 700px;
+    &:hover {
+        cursor: default;
+    }
+
+    
+    .card-body {
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            height: 12.5rem;
+            input {
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 1rem;
+            }
+            button {
+                margin-right: auto;
+                padding: 0.2rem .7rem;
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                background-color: $main-light-blue-color;
+                border-color: $main-light-blue-color;
+
+                &:focus {
+                    box-shadow: none;
+                }
+
+                &:active {
+                    box-shadow: none !important;
+                    color: $main-black-color !important;
+                    background-color: $main-light-blue-color !important;
+                }
+            }
+        }
+    }
+}
