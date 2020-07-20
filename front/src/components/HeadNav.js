@@ -6,7 +6,7 @@ import {HamburgerButton} from 'react-hamburger-button'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HeadNav.scss'
 
-function HeadNav(props) {
+function HeadNav(props, ref) {
 
     const [isToggelClose, setToggleClose] = useState(true)
     /**Explanation about 'isToggleClose':
@@ -24,7 +24,7 @@ function HeadNav(props) {
      })
 
     return (
-        <Navbar collapseOnSelect expand="lg" className="navbar-fix-style">
+        <Navbar ref={ref} collapseOnSelect expand="lg" className="navbar-fix-style">
             <Navbar.Brand className="brand">
                 <h4>
                     Restuarant
@@ -56,4 +56,4 @@ function HeadNav(props) {
     )
 }
 
-export default HeadNav
+export default React.forwardRef(HeadNav)

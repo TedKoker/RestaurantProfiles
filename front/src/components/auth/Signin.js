@@ -15,12 +15,23 @@ function Signin(props) {
     const history = useHistory()
 
     const onSubmit = useCallback((formProps) => {
-        props.signin(formProps, () => {
-            history.push('/')
+        return new Promise((resolve, reject) => {
+            props.signin(formProps, () => {
+                console.log('in')
+            })
+            if(props.errorMessage) {
+                reject()
+            } else {
+                resolve()
+            }
         })
     })
 
-    const {handleSubmit} = props
+    const {handleSubmit, submitting } = props
+
+    useEffect(() => {
+        console.log("subnitting", props.submitting)
+    },[props.submitting])
 
     return (
         <Card className="text-center">
@@ -48,9 +59,10 @@ function Signin(props) {
                             placeholder="Password"
                         />
                     </fieldset>
-                    <Button variant="primary" size="sm">
+                    <Button variant="primary" size="sm" type="submit">
                         Sign in
                     </Button>
+                    {props.errorMessage}
                 </form>
                 <Card.Footer className="text-muted">Not a Member? Sign up</Card.Footer>
             </Card.Body>
@@ -58,7 +70,11 @@ function Signin(props) {
     )
 }
 
+function mapToProps(state) {
+    return {errorMessage: state.auth.errorMessage}
+}
+
 export default compose(
-    connect(null, actions),
+    connect(mapToProps, actions),
     reduxForm({form: 'signin'})
 )(Signin)

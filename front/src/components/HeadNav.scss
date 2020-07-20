@@ -2,6 +2,7 @@
 
 .navbar-light {
     background-color: $main-white-color;
+    position: relative;
     
     ::selection {
         background-color: $main-light-blue-color;
@@ -58,3 +59,4 @@
         }
     }
 }
+
