@@ -2,45 +2,47 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {connect} from 'react-redux'
 import Alert from 'react-bootstrap/Alert'
 import {CSSTransition} from 'react-transition-group'
+import { Fade } from 'react-bootstrap';
 import './app.scss'
 
 import HeadNav from './components/HeadNav'
-import { Fade } from 'react-bootstrap';
+import * as actions from './actions'
 
 function App(props) {
 
-  const [isAlertOpen, setAlert] = useState(true)
+  const [isAlertOpen, setAlert] = useState(alert.errorMessage !== undefined)
 
   const [alertTop, setAlertTop] = useState(0)
 
   const handleClick = useCallback(() => {
-    setAlert(!isAlertOpen)
+    props.nullifyAuthErrors()
   })
 
   const headRef = useRef()
 
   
   useEffect(() => {
-    console.log(headRef)
     if(headRef) {
       setAlertTop(window.getComputedStyle(headRef.current).getPropertyValue('height'))
-      //console.log(headRef)
     }
   }, [headRef])
+
+  useEffect(() => {
+    setAlert(props.alert !== undefined && props.alert !== "" )
+  },[props])
 
   return (
     <>
       <HeadNav ref={headRef}/>
-      <Alert variant="danger" 
+      <Alert variant={props.alertVariant}
         show={isAlertOpen} 
         onClick={handleClick} 
         transition={Fade} 
         style={{top: alertTop}} 
         dismissible>
-        <Alert.Heading>Oops...</Alert.Heading>
-        test
+        <Alert.Heading as="h6">{props.alertHeading}</Alert.Heading>
+        {props.alert}
       </Alert>
-      <button onClick={handleClick}>test</button>
       <div className="main-div">
         {props.children}
       </div>
@@ -49,8 +51,21 @@ function App(props) {
 }
 
 function mapToProps(state) {
-  //console.log('map to props', state)
-  return {auth: state.auth.authenticated}
+  let alertVariant, alertHeading
+
+  if(state.auth.errorMessage) {
+    alertVariant="danger"
+    alertHeading="Oops..."
+  }
+  return {
+    auth: state.auth.authenticated,
+    alert: state.auth.errorMessage,
+    alertVariant, alertHeading
+    /**
+     * When I will have a couple types of alerts,
+     * use the || symbol and put all of the varibles from redux, and react will take the first that is true
+     */
+  }
 }
 
-export default connect(mapToProps)(App);
+export default connect(mapToProps, actions)(App);

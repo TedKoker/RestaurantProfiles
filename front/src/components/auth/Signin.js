@@ -5,6 +5,7 @@ import {reduxForm, Field} from 'redux-form'
 import { useHistory } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import Spinner from 'react-bootstrap/Spinner'
 import './signin.scss'
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -14,24 +15,29 @@ function Signin(props) {
 
     const history = useHistory()
 
-    const onSubmit = useCallback((formProps) => {
-        return new Promise((resolve, reject) => {
-            props.signin(formProps, () => {
-                console.log('in')
+    const loadingBtn = <Spinner
+                            as="span"
+                            animation="border"
+                            size="lg"
+                            role="status"
+                            aria-hidden="true"
+                        />
+
+    const onSubmit = useCallback(async (formProps) => {
+        return new Promise(async (resolve, reject) => {
+            let promiseResolved = false
+            await props.signin(formProps, () => {
+                promiseResolved = true
             })
-            if(props.errorMessage) {
-                reject()
-            } else {
+            if(promiseResolved) {
                 resolve()
+            } else {
+                reject()
             }
         })
     })
 
-    const {handleSubmit, submitting } = props
-
-    useEffect(() => {
-        console.log("subnitting", props.submitting)
-    },[props.submitting])
+    const {handleSubmit } = props
 
     return (
         <Card className="text-center">
@@ -59,11 +65,11 @@ function Signin(props) {
                             placeholder="Password"
                         />
                     </fieldset>
-                    <Button variant="primary" size="sm" type="submit">
-                        Sign in
+                    <Button variant="primary" size="sm" type="submit" disabled={props.submitting}>
+                        {!props.submitting ? 'Sign In' : loadingBtn}
                     </Button>
-                    {props.errorMessage}
                 </form>
+                {props.errorMessage}
                 <Card.Footer className="text-muted">Not a Member? Sign up</Card.Footer>
             </Card.Body>
         </Card>

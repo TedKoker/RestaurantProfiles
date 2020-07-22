@@ -12,7 +12,7 @@ const app = express()
 //db setup
 mongoose.connect(dbConfig.dbAdress, dbConfig.options).catch(err => {
     console.log('***********Error occurred************')
-    console.log(error)
+    console.log(err)
 }).then(() => {
     console.log("connected to", dbConfig.dbAdress)
 })

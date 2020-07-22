@@ -2,6 +2,7 @@ const ExtractJwt = require("passport-jwt").ExtractJwt
 const JwtStrategy = require("passport-jwt").Strategy
 const LocalStrategy = require("passport-local")
 const passport = require("passport")
+const e =require("express")
 
 const dbConfig = require("../dbConfig")
 const User = require("../models/User")
@@ -11,13 +12,13 @@ const localOptions = {
 }
 
 const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
-    User.findOne({email: email}, (err, user) => {
+    User.findOne({email: email}, (err, user ) => {
         if(err) {
             return done(err)
         }
-
+        
         if(!user) {
-            return done(null, false)
+            return done(null, {faild: true, message: "Credentials are not valid"})
         }
         
         user.comparePasswords(password, user, (err, isMatch) => {
@@ -26,9 +27,8 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
             }
 
             if(!isMatch) {
-                return done(null, false)
+                return done(null, {faild: true, message: "Credentials are not valid"})
             }
-
             return done(null,user)
         })
     })

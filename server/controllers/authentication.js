@@ -10,11 +10,10 @@ function tokenForUser(user) {
 }
 
 exports.signin = (req, res, next) => {
-    const {email, password} = req.body
-    if(!email || !password) {
-        res.status(400).send({error: "you must fill email and password"})
+    if(req.user.faild) {
+        return res.status(401).send({message: req.user.message})
     }
-    res.send({token: tokenForUser(req.user)})
+    return res.send({token: tokenForUser(req.user)})
 }
 
 exports.signup = (req,res,next) => {
