@@ -13,16 +13,23 @@
     .card-body {
         form {
             display: flex;
-            flex-direction: column;
-            justify-content: space-around;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
             width: 90%;
             margin-left: auto;
             margin-right: auto;
-            height: 12.5rem;
+            min-height: 12.5rem;
+            height: auto;
             input {
                 margin-left: auto;
                 margin-right: auto;
-                margin-bottom: 1rem;
+                margin-bottom: 1rem !important;
+                &.half-width {
+                    margin-bottom: 1rem;
+                    margin: 0;
+                    width: 48%;
+                }
             }
             button {
                 margin-right: auto;

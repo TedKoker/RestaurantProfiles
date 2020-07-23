@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Spinner from 'react-bootstrap/Spinner'
-import './signin.scss'
+import './auth.scss'
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
 import * as actions from '../../actions'

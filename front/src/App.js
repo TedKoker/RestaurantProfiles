@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {connect} from 'react-redux'
 import Alert from 'react-bootstrap/Alert'
-import {CSSTransition} from 'react-transition-group'
 import { Fade } from 'react-bootstrap';
 import './app.scss'
 
@@ -32,7 +31,7 @@ function App(props) {
   },[props])
 
   return (
-    <>
+    <div>
       <HeadNav ref={headRef}/>
       <Alert variant={props.alertVariant}
         show={isAlertOpen} 
@@ -46,7 +45,7 @@ function App(props) {
       <div className="main-div">
         {props.children}
       </div>
-    </>
+    </div>
   );
 }
 
