@@ -2,8 +2,7 @@ import axios from 'axios'
 import {controllers} from '../config'
 import {AUTH_USER, AUTH_ERROR} from './types'
 
-export const signin = (formProps, callback, ...args) => async dispatch => {
-    
+export const signin = (formProps, callback, ...args) => async dispatch => { 
     try {
         const response = await axios.post(controllers.signin, formProps)
         dispatch({type: AUTH_USER, payload: response.data.token})
@@ -13,6 +12,10 @@ export const signin = (formProps, callback, ...args) => async dispatch => {
     } catch(e) {
         dispatch({type: AUTH_ERROR, payload: e.response.data.message})
     }
+}
+
+export const signup = (formprops, callback, ...args) => async dispatch => {
+    //const respspone =
 }
 
 export const nullifyAuthErrors = () => dispatch => {

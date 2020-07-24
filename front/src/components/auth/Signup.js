@@ -53,12 +53,13 @@ function renderField(props) {
         <OverlayTrigger
             placement={props.direction}
             show={!active && error && (dirty || submitFailed)}
+            trigger={null}
             overlay={
                  <Tooltip className="tooltip-error">
                      {error}
                  </Tooltip>
             }>
-            <input {...input} className={className}
+            <input {...input} className={className + (!active && error && (dirty || submitFailed) ? " error" : "")}
                     type={type} 
                     placeholder={placeholder}
                     />
