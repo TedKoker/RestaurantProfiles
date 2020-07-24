@@ -45,26 +45,22 @@ function Signin(props) {
             <Card.Body>
                 <Card.Title>Sign in</Card.Title>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <fieldset>
-                        <Field 
-                            name="email"
-                            type="text"
-                            component="input"
-                            autoComplete="none"
-                            className="form-control"
-                            placeholder="Email"
-                        />
-                    </fieldset>
-                    <fieldset>
-                        <Field 
-                            name="password"
-                            type="password"
-                            component="input"
-                            autoComplete="none"
-                            className="form-control"
-                            placeholder="Password"
-                        />
-                    </fieldset>
+                    <Field 
+                        name="email"
+                        type="text"
+                        component="input"
+                        autoComplete="none"
+                        className="form-control"
+                        placeholder="Email"
+                    />
+                    <Field 
+                        name="password"
+                        type="password"
+                        component="input"
+                        autoComplete="none"
+                        className="form-control"
+                        placeholder="Password"
+                    />
                     <Button variant="primary" size="sm" type="submit" disabled={props.submitting}>
                         {!props.submitting ? 'Sign In' : loadingBtn}
                     </Button>

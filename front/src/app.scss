@@ -37,3 +37,25 @@
         margin-bottom: 0;
     }
 }
+
+.tooltip-error {
+    &.bs-tooltip-left {
+        .arrow {
+            &::before {
+                border-left-color: $transperent-red-color !important;
+            }
+        }
+    }
+
+    &.bs-tooltip-right {
+        .arrow {
+            &::before {
+                border-right-color: $transperent-red-color !important;
+            }
+        }
+    }
+    .tooltip-inner {
+        background-color: $transperent-red-color;
+        color: $dark-red-color;
+    }
+}

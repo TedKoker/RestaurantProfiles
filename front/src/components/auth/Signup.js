@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 import './auth.scss'
+import '../../app.scss'
 
 const required = (value) => {
     if(value) {
@@ -39,45 +40,27 @@ const passwordPattern = mustBePattern(passwordRegex, "Must contain: One lowertca
 const mustBeLong2 = mustBeLength(2)
 const mustBeLong8 = mustBeLength(8)
 
-const showErrorLogic = (meta) => {
-    const {error, submitFailed, dirty} = meta
-
-    if(dirty) {
-        return error ? true : false
-    }
-    else {
-        return submitFailed ? true : false
-    }
-}
-
 function renderField(props) {
     const {
         input,
-        input:{onFocus},
         type,
         placeholder,
         className,
-        meta,
-        meta: {error}
+        meta: {error, active, dirty, submitFailed}
     } = props
-
-    const focusHandler = (e) => {
-        console.log(props)
-    }
 
     return(
         <OverlayTrigger
-            placement="left"
-            show={showErrorLogic(meta)}
+            placement={props.direction}
+            show={!active && error && (dirty || submitFailed)}
             overlay={
-                 <Tooltip>
+                 <Tooltip className="tooltip-error">
                      {error}
                  </Tooltip>
             }>
             <input {...input} className={className}
                     type={type} 
                     placeholder={placeholder}
-                    //onFocus={focusHandler}
                     />
         </OverlayTrigger>
     )
@@ -106,6 +89,7 @@ function Signup(props) {
                             className="form-control"
                             placeholder="Email"
                             validate={[required, emailPattern]}
+                            direction="left"
                         />
                         <Field 
                             name="fName"
@@ -115,6 +99,7 @@ function Signup(props) {
                             className="form-control half-width"
                             placeholder="First Name"
                             validate={[required, mustBeLong2]}
+                            direction="left"
                         />
                         <Field 
                             name="lName"
@@ -124,6 +109,7 @@ function Signup(props) {
                             className="form-control half-width"
                             placeholder="Last Name"
                             validate={[required, mustBeLong2]}
+                            direction="right"
                         />
                         <Field 
                             name="password"
@@ -133,6 +119,7 @@ function Signup(props) {
                             className="form-control half-width"
                             placeholder="Password"
                             validate={[required, mustBeLong8, passwordPattern]}
+                            direction="left"
                         />
                         <Field 
                             name="confermPassword"
@@ -142,6 +129,7 @@ function Signup(props) {
                             className="form-control half-width"
                             placeholder="Conferm Password"
                             validate={[required]}
+                            direction="right"
                         />
                         <Button variant="primary" size="sm" type="submit">
                             Sign Up
