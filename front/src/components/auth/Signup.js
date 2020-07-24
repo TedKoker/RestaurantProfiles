@@ -1,10 +1,12 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import {compose} from 'redux'
 import {reduxForm, Field, SubmissionError } from 'redux-form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
+
+import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
 import './auth.scss'
 import '../../app.scss'
 
@@ -49,6 +51,7 @@ function renderField(props) {
         meta: {error, active, dirty, submitFailed}
     } = props
 
+
     return(
         <OverlayTrigger
             placement={props.direction}
@@ -67,13 +70,40 @@ function renderField(props) {
     )
 }
 
+function responsiveRenderField(props) {
+    const {
+        input,
+        type,
+        placeholder,
+        className,
+        meta: {error, active, dirty, submitFailed}
+    } = props
+
+    return (
+        <>
+            <input {...input} className={className + (!active && error && (dirty || submitFailed) ? " error" : "")}
+                        type={type} 
+                        placeholder={placeholder}
+            />
+            <span className={(!active && error && (dirty || submitFailed) ? " error" : "")}>
+                {!active && error && (dirty || submitFailed) ? error : undefined}
+                </span>
+        </>
+    )
+}
+
 function Signup(props) {
 
     const onSubmit = useCallback((formProps) => {
         console.log('on submit')
     })
 
-    const [showErrors, setErrors] = useState(false)
+    const [winWidth] = useWindowSize()
+    const [isResponsive, setResponsive] = useState(winWidth < 767 ? true : false)
+
+    useEffect(() => {
+        setResponsive(winWidth < 767 ? true : false)
+    },[winWidth])
 
     return (
         <div>
@@ -85,7 +115,7 @@ function Signup(props) {
                         <Field 
                             name="email"
                             type="text"
-                            component={renderField}
+                            component={isResponsive ? responsiveRenderField : renderField}
                             autoComplete="none"
                             className="form-control"
                             placeholder="Email"
@@ -95,9 +125,9 @@ function Signup(props) {
                         <Field 
                             name="fName"
                             type="text"
-                            component={renderField}
+                            component={isResponsive ? responsiveRenderField : renderField}
                             autoComplete="none"
-                            className="form-control half-width"
+                            className={"form-control " + (isResponsive ? "" : "half-width")}
                             placeholder="First Name"
                             validate={[required, mustBeLong2]}
                             direction="left"
@@ -105,9 +135,9 @@ function Signup(props) {
                         <Field 
                             name="lName"
                             type="text"
-                            component={renderField}
+                            component={isResponsive ? responsiveRenderField : renderField}
                             autoComplete="none"
-                            className="form-control half-width"
+                            className={"form-control " + (isResponsive ? "" : "half-width")}
                             placeholder="Last Name"
                             validate={[required, mustBeLong2]}
                             direction="right"
@@ -115,9 +145,9 @@ function Signup(props) {
                         <Field 
                             name="password"
                             type="password"
-                            component={renderField}
+                            component={isResponsive ? responsiveRenderField : renderField}
                             autoComplete="none"
-                            className="form-control half-width"
+                            className={"form-control " + (isResponsive ? "" : "half-width")}
                             placeholder="Password"
                             validate={[required, mustBeLong8, passwordPattern]}
                             direction="left"
@@ -125,9 +155,9 @@ function Signup(props) {
                         <Field 
                             name="confermPassword"
                             type="password"
-                            component={renderField}
+                            component={isResponsive ? responsiveRenderField : renderField}
                             autoComplete="none"
-                            className="form-control half-width"
+                            className={"form-control " + (isResponsive ? "" : "half-width")}
                             placeholder="Conferm Password"
                             validate={[required]}
                             direction="right"

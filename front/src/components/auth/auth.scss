@@ -22,24 +22,28 @@
             min-height: 12.5rem;
             height: auto;
             input {
-                margin-left: auto;
-                margin-right: auto;
-                margin-bottom: 1rem !important;
                 &.error {
                     border-color: $dark-red-color;
-                    color: $dark-red-color;
                     &::placeholder {
                         color: $dark-red-color;
                     }
                 }
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 1rem !important;
                 &.half-width {
-                    margin-bottom: 1rem;
+                    margin-top: 1rem;
                     margin: 0;
                     width: 48%;
                 }
             }
+            .error {
+                color: $dark-red-color;
+                text-align: left;
+            }
             button {
                 margin-right: auto;
+                margin-top: 1rem;
                 padding: 0.2rem .7rem;
                 font-size: 1.2rem;
                 margin-bottom: 1rem;

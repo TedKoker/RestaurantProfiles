@@ -24,7 +24,7 @@ function HeadNav(props, ref) {
      })
 
     return (
-        <Navbar ref={ref} collapseOnSelect expand="lg" className="navbar-fix-style">
+        <Navbar ref={ref} collapseOnSelect expand="md" className="navbar-fix-style">
             <Navbar.Brand className="brand">
                 <h4>
                     Restuarant
