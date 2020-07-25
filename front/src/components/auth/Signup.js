@@ -1,12 +1,16 @@
 import React, { useCallback, useState, useEffect } from 'react'
+import {Link} from 'react-router-dom'
 import {compose} from 'redux'
+import {connect} from 'react-redux'
 import {reduxForm, Field, SubmissionError } from 'redux-form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import Spinner from 'react-bootstrap/Spinner'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
+import * as actions from '../../actions'
 import './auth.scss'
 import '../../app.scss'
 
@@ -87,7 +91,7 @@ function responsiveRenderField(props) {
             />
             <span className={(!active && error && (dirty || submitFailed) ? " error" : "")}>
                 {!active && error && (dirty || submitFailed) ? error : undefined}
-                </span>
+            </span>
         </>
     )
 }
@@ -95,11 +99,38 @@ function responsiveRenderField(props) {
 function Signup(props) {
 
     const onSubmit = useCallback((formProps) => {
-        console.log('on submit')
+
+        if(formProps.password !== formProps.confermPassword) {
+            throw new SubmissionError({
+                password: "Passwords must match",
+                confermPassword: "Passwords must match"
+            })
+        }
+
+        return new Promise(async (resolve, reject) => {
+            let promiseResolved = false
+            await props.signup(formProps, () => {
+                promiseResolved = true
+            })
+
+            if(promiseResolved) {
+                resolve()
+            } else {
+                reject()
+            }
+        })
     })
 
     const [winWidth] = useWindowSize()
     const [isResponsive, setResponsive] = useState(winWidth < 767 ? true : false)
+
+    const loadingBtn = <Spinner
+                            as="span"
+                            animation="border"
+                            size="lg"
+                            role="status"
+                            aria-hidden="true"
+                        />
 
     useEffect(() => {
         setResponsive(winWidth < 767 ? true : false)
@@ -162,26 +193,24 @@ function Signup(props) {
                             validate={[required]}
                             direction="right"
                         />
-                        <Button variant="primary" size="sm" type="submit">
-                            Sign Up
+                        <Button variant="primary" size="sm" type="submit" disabled={props.submitting}>
+                            {!props.submitting ? 'Sign Un' : loadingBtn}
                         </Button>
                     </form>
                 </Card.Body>
-                <Card.Footer>Already a member? Sign in</Card.Footer>
+                <Card.Footer className="text-muted">Already a member? {" "}
+                    <Link to="/signin">
+                        Sign in
+                    </Link>
+                </Card.Footer>
             </Card>
         </div>
     )
 }
 
 export default compose(
+    connect(null, actions),
     reduxForm({
-        form: 'signup',
-        onSubmitSuccess: () => {
-            console.log("success")
-        },
-        onSubmitFail: (e) => {
-            console.log('fails', e)
-        },
-        enableReinitialize: true
+        form: 'signup'
     })
 )(Signup)

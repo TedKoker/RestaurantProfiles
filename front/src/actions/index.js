@@ -14,8 +14,18 @@ export const signin = (formProps, callback, ...args) => async dispatch => {
     }
 }
 
-export const signup = (formprops, callback, ...args) => async dispatch => {
-    //const respspone =
+export const signup = (formProps, callback, ...args) => async dispatch => {
+    try {
+        const response = await axios.post(controllers.signup, formProps)
+        dispatch({type: AUTH_USER, payload: response.data.token})
+        dispatch({type: AUTH_ERROR, payload: undefined})
+        localStorage.setItem('token', response.data.token)
+        callback(args)
+    } catch(e) {
+        console.log(e.response)
+        dispatch({type: AUTH_ERROR, payload: e.response.data.message})
+    }
+    
 }
 
 export const nullifyAuthErrors = () => dispatch => {

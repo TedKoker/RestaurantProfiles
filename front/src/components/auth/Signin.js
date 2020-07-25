@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback } from 'react'
+import {Link} from 'react-router-dom'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {reduxForm, Field} from 'redux-form'
@@ -7,7 +8,6 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Spinner from 'react-bootstrap/Spinner'
 import './auth.scss'
-//import 'bootstrap/dist/css/bootstrap.min.css';
 
 import * as actions from '../../actions'
 
@@ -23,7 +23,7 @@ function Signin(props) {
                             aria-hidden="true"
                         />
 
-    const onSubmit = useCallback(async (formProps) => {
+    const onSubmit = useCallback((formProps) => {
         return new Promise(async (resolve, reject) => {
             let promiseResolved = false
             await props.signin(formProps, () => {
@@ -66,7 +66,11 @@ function Signin(props) {
                     </Button>
                 </form>
                 {props.errorMessage}
-                <Card.Footer className="text-muted">Not a Member? Sign up</Card.Footer>
+                <Card.Footer className="text-muted">Not a Member?{" "}
+                    <Link to="/signup">
+                        Sign up
+                    </Link>
+                </Card.Footer>
             </Card.Body>
         </Card>
     )

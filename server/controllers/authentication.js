@@ -18,15 +18,14 @@ exports.signin = (req, res, next) => {
 
 exports.signup = (req,res,next) => {
     const {email, password, fName, lName} = req.body
-
     if(!email || !password || !fName || !lName) {
-        return res.status(422).send({error: "All parameters must be sent"})
+        return res.status(422).send({message: "All parameters must be sent"})
     }
     if(!email.match(regexHub.emailRegex)) {
-        return res.status(400).send({error: "email is not valid"})
+        return res.status(400).send({message: "email is not valid"})
     }
     if(!password.match(regexHub.passwordRegex)) {
-        return res.status(400).send({error: "password must contain atleast 8 characters, atleast one lowercase, atleast one uppercase, atleast one number, atleast one special character and no whitspaces"})
+        return res.status(400).send({message: "password must contain atleast 8 characters, atleast one lowercase, atleast one uppercase, atleast one number, atleast one special character and no whitspaces"})
     }
 
     User.findOne({email: email}, (err, existingUser) => {
@@ -35,7 +34,7 @@ exports.signup = (req,res,next) => {
         }
 
         if(existingUser) {
-            return res.status(422).send({error:"Email is in use"})
+            return res.status(422).send({message:"Email is in use"})
         }
 
         const user = new User({
