@@ -133,6 +133,7 @@ function Signup(props) {
                         />
 
     useEffect(() => {
+        console.log("inside windows", winWidth)
         setResponsive(winWidth < 767 ? true : false)
     },[winWidth])
 
