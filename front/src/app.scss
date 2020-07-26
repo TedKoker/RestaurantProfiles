@@ -26,8 +26,10 @@
 
 .alert {
     position: absolute !important;
-    width: 100%;
-    top: 0;
+    width: 100% !important;
+    margin-top: auto;
+    bottom: -5.3rem;
+    left: 0;
     z-index: 9000;
     padding: .4rem 1.25rem;
     border-radius: 0 !important;

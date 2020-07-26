@@ -52,6 +52,7 @@ function HeadNav(props, ref) {
                 <Nav.Link>Pricing</Nav.Link>
             </Nav>
             </Navbar.Collapse>
+            {props.children}
         </Navbar>
     )
 }

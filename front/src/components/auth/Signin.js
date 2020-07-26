@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card'
 import Spinner from 'react-bootstrap/Spinner'
 import './auth.scss'
 
+import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
 import * as actions from '../../actions'
 
 function Signin(props) {
@@ -66,7 +67,6 @@ function Signin(props) {
                         {!props.submitting ? 'Sign In' : loadingBtn}
                     </Button>
                 </form>
-                {props.errorMessage}
                 <Card.Footer className="text-muted">Not a Member?{" "}
                     <Link to="/signup">
                         Sign up

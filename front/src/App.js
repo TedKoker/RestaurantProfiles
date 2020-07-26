@@ -32,16 +32,18 @@ function App(props) {
 
   return (
     <div>
-      <HeadNav ref={headRef}/>
+      <HeadNav ref={headRef}>
+        
       <Alert variant={props.alertVariant}
         show={isAlertOpen} 
         onClick={handleClick} 
         transition={Fade} 
-        style={{top: alertTop}} 
+        //style={{bottom: 50}} 
         dismissible>
         <Alert.Heading as="h6">{props.alertHeading}</Alert.Heading>
         {props.alert}
       </Alert>
+      </HeadNav>
       <div className="main-div">
         {props.children}
       </div>
