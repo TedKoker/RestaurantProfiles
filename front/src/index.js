@@ -5,6 +5,7 @@ import {createStore, applyMiddleware} from 'redux'
 import {Provider} from 'react-redux'
 import reduxThunk from 'redux-thunk'
 
+import {alertManager} from './shared/sharedLogic/reduxMiddlware'
 import App from './App';
 import reducers from './reducers'
 import Signin from './components/auth/Signin'
@@ -14,7 +15,10 @@ import WelcomeUser from './components/WelcomeUser'
 const store = createStore(
   reducers,
   {
-    auth: {authenticated: localStorage.getItem('token')}
+    auth: {
+      authenticated: localStorage.getItem('token'),
+      connectedUser: JSON.parse(localStorage.getItem('connectedUser'))
+    }
   },
   applyMiddleware(reduxThunk)
 )

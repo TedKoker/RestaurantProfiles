@@ -42,7 +42,7 @@ const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")
 const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/
 
 const emailPattern = mustBePattern(emailRegex, "Must be a valid email")
-const passwordPattern = mustBePattern(passwordRegex, "Must contain: One lowertcase, one uppercase, one number, one spcil character")
+const passwordPattern = mustBePattern(passwordRegex, "Must contain: One lowertcase, one uppercase, one number, one spcial character")
 const mustBeLong2 = mustBeLength(2)
 const mustBeLong8 = mustBeLength(8)
 
@@ -133,7 +133,6 @@ function Signup(props) {
                         />
 
     useEffect(() => {
-        console.log("inside windows", winWidth)
         setResponsive(winWidth < 767 ? true : false)
     },[winWidth])
 

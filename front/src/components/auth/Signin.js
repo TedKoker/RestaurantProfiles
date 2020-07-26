@@ -28,6 +28,7 @@ function Signin(props) {
             let promiseResolved = false
             await props.signin(formProps, () => {
                 promiseResolved = true
+                //props.userByToken()
             })
             if(promiseResolved) {
                 resolve()

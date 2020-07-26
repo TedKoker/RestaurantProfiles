@@ -14,7 +14,7 @@ function App(props) {
   const [alertTop, setAlertTop] = useState(0)
 
   const handleClick = useCallback(() => {
-    props.nullifyAuthErrors()
+    setAlert(false)
   })
 
   const headRef = useRef()
@@ -50,15 +50,22 @@ function App(props) {
 }
 
 function mapToProps(state) {
-  let alertVariant, alertHeading
+  let alertVariant, alertHeading, alertMessage
 
   if(state.auth.errorMessage) {
     alertVariant="danger"
     alertHeading="Oops..."
+    alertMessage=state.auth.errorMessage
   }
+  if(state.auth.successMessage) {
+    alertVariant="success"
+    alertHeading = "Welcome"
+    alertMessage = state.auth.successMessage
+  }
+
   return {
     auth: state.auth.authenticated,
-    alert: state.auth.errorMessage,
+    alert: alertMessage,
     alertVariant, alertHeading
     /**
      * When I will have a couple types of alerts,

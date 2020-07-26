@@ -1,8 +1,10 @@
 const AuthController = require("./controllers/authentication")
 const passport = require("passport")
 const passportService = require("./services/passport")
+const userController = require("./controllers/userController")
 
 const requireSignin = passport.authenticate("local", {session:false})
+const requireAuth = passport.authenticate("jwt", { session: false })
 
 const loginValid = (req,res, next) => {
     const {email, password} = req.body
@@ -13,10 +15,7 @@ const loginValid = (req,res, next) => {
 }
 
 module.exports = app => {
-    app.get('/', (req, res) => {
-        res.send({test: 'test'})
-    })
-    
+    app.get('/userByToken',requireAuth, userController.getUser)
     app.post('/signup', AuthController.signup)
     app.post('/signin', [loginValid,requireSignin], AuthController.signin)
 }
