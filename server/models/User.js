@@ -55,5 +55,23 @@ userSchema.methods.comparePasswords = (candidatePassword,user, callback) => {
     })
 }
 
+userSchema.methods.changePassword = (user) => {
+    user.lName = "ted"
+    user.fName = "ted"
+    // bcrypt.genSalt(10, function(err, salt) {
+    //     if(err) {
+    //         return next(err)
+    //     }
+
+    //     bcrypt.hash(newPassword, salt, null,  function(err, hash) {
+    //         if(err) {
+    //             next(err)
+    //         }
+    //         user.password = hash
+    //         next()
+    //     })
+    // })
+}
+
 const ModealClass = mongoose.model('user', userSchema)
 module.exports = ModealClass

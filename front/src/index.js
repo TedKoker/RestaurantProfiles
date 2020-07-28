@@ -1,16 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Route} from 'react-router-dom'
 import {createStore, applyMiddleware} from 'redux'
 import {Provider} from 'react-redux'
 import reduxThunk from 'redux-thunk'
 
-import {alertManager} from './shared/sharedLogic/reduxMiddlware'
 import App from './App';
 import reducers from './reducers'
 import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
-import WelcomeUser from './components/WelcomeUser'
 
 const store = createStore(
   reducers,

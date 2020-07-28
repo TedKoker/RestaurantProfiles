@@ -43,12 +43,10 @@ exports.signup = (req,res,next) => {
             fName: fName,
             lName: lName
         })
-
         user.save(err => {
             if(err) {
                 return next(err)
             }
-
             res.json({token: tokenForUser(user)})
         })
     })
