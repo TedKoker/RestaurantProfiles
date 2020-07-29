@@ -9,6 +9,7 @@ import App from './App';
 import reducers from './reducers'
 import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
+import UserProfile from './components/auth/UserProfile'
 
 const store = createStore(
   reducers,
@@ -34,6 +35,8 @@ ReactDOM.render(
       <App>
         <Route path="/signup" component={Signup} />
         <Route path="/signin" component={Signin}/>
+        <Route path="/profile" component={UserProfile}/>
+        {/**Change the path from 'profile' to :_id */}
       </App>
     </BrowserRouter>
   </Provider>,

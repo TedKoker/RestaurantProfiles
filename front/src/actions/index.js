@@ -1,13 +1,17 @@
 import axios from 'axios'
 import {controllers} from '../config'
-import {AUTH_USER, AUTH_ERROR, CONNECTED_USER, AUTH_SUCCESS} from './types'
+import {AUTH_USER, AUTH_ERROR, CONNECTED_USER, AUTH_SUCCESS, ACTION_SUCCEED} from './types'
 
 export const userByToken = () => async dispatch => {
-    console.log('inside user by token')
-    const token = localStorage.getItem('token')
-    const response = await axios.get(controllers.userByToken, {headers: {authorization: token}})
-    dispatch({type: CONNECTED_USER, payload: response.data})
-    localStorage.setItem('connectedUser', JSON.stringify(response.data))
+    try {
+        const token = localStorage.getItem('token')
+        const response = await axios.get(controllers.userByToken, {headers: {authorization: token}})
+        dispatch({type: CONNECTED_USER, payload: response.data})
+        localStorage.setItem('connectedUser', JSON.stringify(response.data))
+    } catch(e) {
+        dispatch({type: AUTH_ERROR, payload: e.response.data.message})
+    }
+    
 }
 
 export const signin = (formProps, callback, ...args) => async dispatch => { 
@@ -45,6 +49,15 @@ export const signup = (formProps, callback, ...args) => async dispatch => {
         dispatch({type: AUTH_ERROR, payload: e.response.data.message})
     }
     
+}
+
+export const editProfile = (formProps, callback, ...args) => async dispatch => {
+    const token = localStorage.getItem('token')
+    const response = await axios.put(controllers.editUser,formProps, {headers: {authorization: token}})
+    dispatch({type: CONNECTED_USER, payload: response.data})
+    localStorage.setItem('connectedUser', JSON.stringify(response.data))
+    dispatch({type: ACTION_SUCCEED, payload: 'Profile updated'})
+    callback(args)
 }
 
 export const nullifyAuthErrors = () => dispatch => {
