@@ -45,6 +45,25 @@ userSchema.pre("save", function(next) {
     })
 })
 
+// userSchema.pre("update", (next) => {
+//     console.log('pre update')
+//     next()
+// })
+
+// userSchema.pre("updateOne", () => {
+//     console.log('pre update one')
+// })
+
+// userSchema.pre("findOneAndUpdate", (next) => {
+//     const user = this
+//     console.log("find one an update pre action", user)
+//     next()
+// })
+
+// userSchema.post("findOneAndUpdate", (e) => {
+//     console.log('inside post', e)
+// })
+
 userSchema.methods.comparePasswords = (candidatePassword,user, callback) => {
     bcrypt.compare(candidatePassword, user.password, (err, isMatch) => {
         if(err) {

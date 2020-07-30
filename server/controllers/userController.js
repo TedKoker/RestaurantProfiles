@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt-nodejs")
 const jwt = require("jwt-simple")
 
 const dbConfig = require("../dbConfig")
@@ -20,4 +21,25 @@ exports.editUser = (req, res, next) => {
       }).catch(err => {
         return next(err)
       })
+}
+
+exports.passwordChange = (req,res, next) => {
+  const { body: { newPassword }, user } = req
+  bcrypt.genSalt(10, (err, salt) => {
+    if(err) {
+      return next(err)
+    }
+
+    bcrypt.hash(newPassword, salt, null, (err, hash) => {
+      if(err) {
+        return next(err)
+      }
+      User.findByIdAndUpdate({_id: user._id}, {password: hash}, {new: true}).
+        then((result) => {
+          return res.send(result)
+        }).catch(err => {
+          return next(err)
+        })
+    })
+  })
 }

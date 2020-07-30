@@ -16,6 +16,7 @@ mongoose.connect(dbConfig.dbAdress, dbConfig.options).catch(err => {
 }).then(() => {
     console.log("connected to", dbConfig.dbAdress)
 })
+mongoose.set('useFindAndModify', false);
 
 //app setup
 app.use(morgan("combined"))

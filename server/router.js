@@ -35,8 +35,18 @@ const userEditValud = (req,res,next) => {
     }).catch(err => {
         return next(err)
     })
-    
-    //return next()
+}
+
+const passwordChangeValidation = (req,res,next) => {
+    const {newPassword} = req.body
+    if(!newPassword) {
+        return res.status(400).send({message: "Request did not contain new password"})
+    }
+    if(!newPassword.match(regexHub.passwordRegex)) {
+        return res.status(400).send({message: "password must contain atleast 8 characters, atleast one lowercase, atleast one uppercase, atleast one number, atleast one special character and no whitspaces"})
+    }
+
+    return next()
 }
 
 module.exports = app => {
@@ -44,4 +54,5 @@ module.exports = app => {
     app.post('/signup', AuthController.signup)
     app.post('/signin', [loginValid,requireSignin], AuthController.signin)
     app.put('/userSettings', [requireAuth, userEditValud], userController.editUser)
+    app.put('/passwordChange', [requireAuth, passwordChangeValidation], userController.passwordChange)
 }
