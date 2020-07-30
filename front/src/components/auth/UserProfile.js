@@ -13,6 +13,8 @@ function UserProfile(props) {
             <Card.Header>{props.fullName}</Card.Header>
             <Card.Body>
                 <UserEdit/>
+                <hr/><hr/>
+                {/* change password component */}
             </Card.Body>
         </Card>
     )

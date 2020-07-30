@@ -27,6 +27,7 @@ function App(props) {
   }, [headRef])
 
   useEffect(() => {
+    console.log(props)
     setAlert(props.alert !== undefined && props.alert !== "" )
   },[props])
 
@@ -63,6 +64,18 @@ function mapToProps(state) {
     alertVariant="success"
     alertHeading = "Welcome"
     alertMessage = state.auth.successMessage
+  }
+
+  if(state.actionAlert.actionSucceed) {
+    alertVariant="success"
+    alertHeading = "Action Succeed"
+    alertMessage = state.actionAlert.actionSucceed
+  }
+
+  if(state.actionAlert.actionFaild) {
+    alertVariant="danger"
+    alertHeading = "Action faild"
+    alertMessage = state.actionAlert.actionFaild
   }
 
   return {

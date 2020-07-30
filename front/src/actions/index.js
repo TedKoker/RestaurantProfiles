@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {controllers} from '../config'
-import {AUTH_USER, AUTH_ERROR, CONNECTED_USER, AUTH_SUCCESS, ACTION_SUCCEED} from './types'
+import {AUTH_USER, AUTH_ERROR, CONNECTED_USER, AUTH_SUCCESS, ACTION_SUCCEED, ACTION_FAILD} from './types'
 
 export const userByToken = () => async dispatch => {
     try {
@@ -52,12 +52,16 @@ export const signup = (formProps, callback, ...args) => async dispatch => {
 }
 
 export const editProfile = (formProps, callback, ...args) => async dispatch => {
-    const token = localStorage.getItem('token')
-    const response = await axios.put(controllers.editUser,formProps, {headers: {authorization: token}})
-    dispatch({type: CONNECTED_USER, payload: response.data})
-    localStorage.setItem('connectedUser', JSON.stringify(response.data))
-    dispatch({type: ACTION_SUCCEED, payload: 'Profile updated'})
-    callback(args)
+    try {
+        const token = localStorage.getItem('token')
+        const response = await axios.put(controllers.editUser,formProps, {headers: {authorization: token}})
+        dispatch({type: CONNECTED_USER, payload: response.data})
+        localStorage.setItem('connectedUser', JSON.stringify(response.data))
+        dispatch({type: ACTION_SUCCEED, payload: 'Profile updated'})
+        callback(args)
+    } catch(e) {
+        dispatch({type: ACTION_FAILD, payload: e.response.data.message})
+    }
 }
 
 export const nullifyAuthErrors = () => dispatch => {
