@@ -27,7 +27,6 @@ function App(props) {
   }, [headRef])
 
   useEffect(() => {
-    console.log(props)
     setAlert(props.alert !== undefined && props.alert !== "" )
   },[props])
 

@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import Card from 'react-bootstrap/Card'
 
 import UserEdit from './UserEdit'
+import UserPasswordChange from './UserPasswordChange'
 import './auth.scss'
 import '../../app.scss'
 
@@ -14,7 +15,7 @@ function UserProfile(props) {
             <Card.Body>
                 <UserEdit/>
                 <hr/><hr/>
-                {/* change password component */}
+                <UserPasswordChange/>
             </Card.Body>
         </Card>
     )
