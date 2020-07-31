@@ -14,6 +14,8 @@ import * as actions from '../../actions'
 import './auth.scss'
 import '../../app.scss'
 
+import RequireAuth from '../../shared/sharedLogic/HocComponents'
+
 const required = (value) => {
     if(value) {
         return false

@@ -64,6 +64,23 @@ export const editProfile = (formProps, callback, ...args) => async dispatch => {
     }
 }
 
+export const passwordChange = (formProps, callback, ...args) => async dispatch => {
+    try {
+        const token = localStorage.getItem('token')
+        const response = await axios.put(controllers.passwordChange,formProps, {headers: {authorization: token}})
+        dispatch({type: ACTION_SUCCEED, payload: 'Password updated'})
+        callback(args)
+    }catch(e) {
+        console.log(e.response.data)
+        dispatch({type: ACTION_FAILD, payload: e.response.data.message})
+    }
+}
+
+
+
 export const nullifyAuthErrors = () => dispatch => {
     dispatch({type: AUTH_ERROR, payload: undefined})
+    dispatch({type: AUTH_SUCCESS, payload: undefined})
+    dispatch({type: ACTION_FAILD, payload: undefined})
+    dispatch({type: ACTION_SUCCEED, payload: undefined})
 }

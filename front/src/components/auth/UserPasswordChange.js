@@ -1,12 +1,14 @@
 import React, {useCallback, useState, useEffect} from 'react'
 import {compose} from 'redux'
-import {reduxForm, Field} from 'redux-form'
+import {connect} from 'react-redux'
+import {reduxForm, Field, SubmissionError} from 'redux-form'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
+import * as actions from '../../actions'
 import './auth.scss'
 import '../../app.scss'
 
@@ -108,19 +110,26 @@ function UserPasswordChange(props) {
     },[winWidth])
 
     const onSubmit = useCallback((formProps) => {
-        console.log(formProps)
-        // return new Promise(async (resolve, reject) => {
-        //     let resolved = false
-        //     await props.editProfile(formProps, () => {
-        //         resolved = true
-        //     })
+        if(formProps.password !== formProps.confermPassword) {
+            throw new SubmissionError({
+                password: "Passwords must match",
+                confermPassword: "Passwords must match"
+            })
+        }
+        const fixedProps = (({password}) => {return {newPassword: password}})(formProps)
+        console.log(fixedProps)
+        return new Promise(async (resolve, reject) => {
+            let resolved = false
+            await props.passwordChange(fixedProps, () => {
+                resolved = true
+            })
 
-        //     if(resolved) {
-        //         resolve()
-        //     } else {
-        //         reject()
-        //     }
-        // })
+            if(resolved) {
+                resolve()
+            } else {
+                reject()
+            }
+        })
     })
 
     return (
@@ -153,5 +162,6 @@ function UserPasswordChange(props) {
 }
 
 export default compose(
-    reduxForm({form: 'userEdir'})
+    connect(null, actions),
+    reduxForm({form: 'passwordChange'})
 )(UserPasswordChange)

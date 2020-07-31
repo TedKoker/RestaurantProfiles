@@ -17,6 +17,18 @@ function App(props) {
     setAlert(false)
   })
 
+  useEffect(() => {
+    if(!isAlertOpen) {
+      /**The purpose of the TimeOut function is to wait
+       * untill the animation is finished to nullify all of the errors,
+       * to prevent bugs in the animation
+       */
+      setTimeout(() => {
+        props.nullifyAuthErrors()
+      }, 200)
+    }
+  },[isAlertOpen])
+
   const headRef = useRef()
 
   

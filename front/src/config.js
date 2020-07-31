@@ -4,5 +4,6 @@ export const controllers = {
     signin: `${serverUrl}/signin`,
     signup: `${serverUrl}/signup`,
     userByToken: `${serverUrl}/userByToken`,
-    editUser: `${serverUrl}/userSettings`
+    editUser: `${serverUrl}/userSettings`,
+    passwordChange: `${serverUrl}/passwordChange`
 }

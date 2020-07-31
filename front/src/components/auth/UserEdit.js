@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
+import RequireAuth from '../../shared/sharedLogic/HocComponents'
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
 import * as actions from '../../actions'
 import './auth.scss'
@@ -170,13 +171,17 @@ function UserEdit(props) {
 }
 
 function mapToProps(state) {
-    const {email, fName, lName} = state.auth.connectedUser
-
-    return {
-        initialValues: {
-            email, fName, lName
+    if(state.auth.connectedUser) {
+        const {email, fName, lName} = state.auth.connectedUser
+    
+        return {
+            initialValues: {
+                email, fName, lName
+            }
         }
     }
+
+    return {}
 }
 
 export default compose(
