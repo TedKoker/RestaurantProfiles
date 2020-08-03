@@ -11,6 +11,7 @@ import {alertManager} from './shared/sharedLogic/reduxMiddlware'
 import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
 import UserProfile from './components/auth/UserProfile'
+import AddRestuarant from './components/restuarants/AddRestuarant'
 
 const store = createStore(
   reducers,
@@ -38,6 +39,7 @@ ReactDOM.render(
         <Route path="/signin" component={Signin}/>
         <Route path="/profile" component={UserProfile}/>
         {/**Change the path from 'profile' to :_id */}
+        <Route path="/newRestuarant" component={AddRestuarant}/>
       </App>
     </BrowserRouter>
   </Provider>,

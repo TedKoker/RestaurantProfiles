@@ -18,6 +18,9 @@ const Schema = mongoose.Schema
      owner: {
          ...standartString
      },
+     name: {
+        ...standartString
+     },
      location: {
          city: {
             ...standartString

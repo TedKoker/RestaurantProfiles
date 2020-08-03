@@ -13,3 +13,7 @@ exports.post = (req,res,next) => {
         res.json(restuarant)
     })
 }
+
+exports.put = (req, res, next) => {
+    
+}
