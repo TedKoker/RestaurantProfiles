@@ -2,6 +2,7 @@ const AuthController = require("./controllers/authentication")
 const passport = require("passport")
 const passportService = require("./services/passport")
 const regexHub = require('./regexHub')
+const restuarantConroller = require("./controllers/restuarantController")
 const User = require('./models/User')
 const userController = require("./controllers/userController")
 
@@ -49,10 +50,25 @@ const passwordChangeValidation = (req,res,next) => {
     return next()
 }
 
+const restuarantPostValid = (req,res,next) => {
+    const {location} = req.body
+    if(!location) {
+        return res.status(400).send({message: "Did not recived any location"})
+    }
+
+    if(!location.city || !location.adress) {
+        return res.status(400).send({message: "Adress and city are required"})
+    }
+
+    return next()
+}
+
 module.exports = app => {
     app.get('/userByToken',requireAuth, userController.getUser)
     app.post('/signup', AuthController.signup)
     app.post('/signin', [loginValid,requireSignin], AuthController.signin)
     app.put('/userSettings', [requireAuth, userEditValud], userController.editUser)
     app.put('/passwordChange', [requireAuth, passwordChangeValidation], userController.passwordChange)
+
+    app.post('/restuarant',[requireAuth, restuarantPostValid], restuarantConroller.post)
 }

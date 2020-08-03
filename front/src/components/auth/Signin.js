@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card'
 import Spinner from 'react-bootstrap/Spinner'
 import './auth.scss'
 
+import {OnlyGuests} from '../../shared/sharedLogic/HocComponents'
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
 import * as actions from '../../actions'
 
@@ -29,7 +30,7 @@ function Signin(props) {
             let promiseResolved = false
             await props.signin(formProps, () => {
                 promiseResolved = true
-                //props.userByToken()
+                history.push('/')
             })
             if(promiseResolved) {
                 resolve()
@@ -81,7 +82,9 @@ function mapToProps(state) {
     return {errorMessage: state.auth.errorMessage}
 }
 
-export default compose(
+const component = compose(
     connect(mapToProps, actions),
     reduxForm({form: 'signin'})
 )(Signin)
+
+export default OnlyGuests(component)

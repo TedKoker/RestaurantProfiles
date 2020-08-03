@@ -2,8 +2,7 @@ import React, { useEffect } from 'react'
 import {connect} from 'react-redux'
 import Card from 'react-bootstrap/Card'
 
-// import {RequireAuth} from '../../shared/sharedLogic/HocComponents'
-import RequireAuth from '../../shared/sharedLogic/HocComponents'
+import {RequireAuth} from '../../shared/sharedLogic/HocComponents'
 import UserEdit from './UserEdit'
 import UserPasswordChange from './UserPasswordChange'
 import './auth.scss'
@@ -24,11 +23,16 @@ function UserProfile(props) {
 }
 
 function mapToProps(state) {
-    return {
-        user: state.auth && state.auth.connectedUser,
-        fullName: state.auth &&  `${state.auth.connectedUser.fName} ${state.auth.connectedUser.lName}`
+    console.log(state.auth)
+    if(state.auth.authenticated && state.auth.connectedUser) {
+        return {
+            user: state.auth.connectedUser,
+            fullName:  `${state.auth.connectedUser.fName} ${state.auth.connectedUser.lName}`
+        }
+    } else {
+        return {}
     }
 }
 
-// export default connect(mapToProps)(UserProfile)
-export default RequireAuth(UserProfile,connect,mapToProps)
+const exportedComponent = connect(mapToProps)(UserProfile)
+export default RequireAuth(exportedComponent)

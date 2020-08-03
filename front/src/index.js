@@ -7,6 +7,7 @@ import reduxThunk from 'redux-thunk'
 
 import App from './App';
 import reducers from './reducers'
+import {alertManager} from './shared/sharedLogic/reduxMiddlware'
 import Signin from './components/auth/Signin'
 import Signup from './components/auth/Signup'
 import UserProfile from './components/auth/UserProfile'

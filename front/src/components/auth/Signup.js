@@ -3,18 +3,18 @@ import {Link} from 'react-router-dom'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {reduxForm, Field, SubmissionError } from 'redux-form'
+import { useHistory } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Spinner from 'react-bootstrap/Spinner'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
+import {OnlyGuests} from '../../shared/sharedLogic/HocComponents'
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
 import * as actions from '../../actions'
 import './auth.scss'
 import '../../app.scss'
-
-import RequireAuth from '../../shared/sharedLogic/HocComponents'
 
 const required = (value) => {
     if(value) {
@@ -100,6 +100,7 @@ function responsiveRenderField(props) {
 
 function Signup(props) {
 
+    const history = useHistory()
     const onSubmit = useCallback((formProps) => {
 
         if(formProps.password !== formProps.confermPassword) {
@@ -113,6 +114,7 @@ function Signup(props) {
             let promiseResolved = false
             await props.signup(formProps, () => {
                 promiseResolved = true
+                history.push('/')
             })
 
             if(promiseResolved) {
@@ -210,9 +212,11 @@ function Signup(props) {
     )
 }
 
-export default compose(
+const component = compose(
     connect(null, actions),
     reduxForm({
         form: 'signup'
     })
 )(Signup)
+
+export default OnlyGuests(component)

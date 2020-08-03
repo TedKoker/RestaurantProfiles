@@ -124,12 +124,6 @@ function UserEdit(props) {
         setResponsive(winWidth < 767 ? true : false)
     },[winWidth])
 
-    /**
-     * TO DO:
-     * 1) Add alert for success
-     * 2) Add redux and alert for failed
-     */
-
     return (
         <form onSubmit={props.handleSubmit(onSubmit)}>
             <Field 
