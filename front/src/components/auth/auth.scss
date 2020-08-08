@@ -37,6 +37,27 @@
                     width: 48%;
                 }
             }
+            .list {
+                position: relative;
+                select {
+                    .list-header {
+                        background-color: $main-light-blue-color;
+                        color: $main-white-color;
+                        font-size: 1.2rem;
+                    }
+                }
+                button {
+                    position: absolute;
+                    top: -8px;
+                    right: 17px;
+                    margin: 0;
+                    padding: 0;
+                    background: transparent;
+                    border: none;
+                    color: $main-white-color;
+                    font-size: 1.5rem;
+                }
+            }
             .error {
                 color: $dark-red-color;
                 text-align: left;
