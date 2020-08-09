@@ -11,6 +11,7 @@ import Tooltip from 'react-bootstrap/Tooltip'
 import {RequireAuth} from '../../shared/sharedLogic/HocComponents'
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
 import * as actions from '../../actions'
+import AddingItemModal from './AddItemModal'
 import MenuAdding from './MenuAdding'
 import '../auth/auth.scss'
 import '../../app.scss'
@@ -83,7 +84,7 @@ function selectList(props) {
                     return (<option key={index} value={val}>{val}</option>)
                 })}
             </select>
-            <button>
+            <button type="button" onClick={props.clickEvent}>
                 {addContent}
             </button>
         </div>
@@ -94,6 +95,8 @@ function AddRestuarant(props) {
 
     const [winWidth] = useWindowSize()
     const [isResponsive, setResponsive] = useState(winWidth < 767 ? true : false)
+    const [showModal, setModal] = useState(false)
+    const [modalContant, setModalContant] = useState()
     const [menuObj] = useState({})
     const categories = ["one", "two", "three"]
 
@@ -107,6 +110,9 @@ function AddRestuarant(props) {
 
     const onSubmit = (formProps) => {
         /**map the menu object */
+        Object.keys(menuObj).forEach(key => {
+            menuObj[key] = Object.keys(menuObj[key])
+        })
         formProps.menu = menuObj
         console.log(formProps)
     }
@@ -115,61 +121,85 @@ function AddRestuarant(props) {
         setResponsive(winWidth < 767 ? true : false)
     },[winWidth])
     return (
-        <Card className="text-center">
-            <Card.Header>Open a new restuarant</Card.Header>
-            <Card.Body>
-                <form onSubmit={props.handleSubmit(onSubmit)}>
-                    <Field 
-                        name="name"
-                        type="text"
-                        component={isResponsive ? responsiveRenderField : renderField}
-                        autoComplete="none"
-                        className="form-control"
-                        placeholder="Name"
-                        //validate={[required, emailPattern]}
-                        direction="left"
-                    />
-                    <Field 
-                        name="location.city"
-                        type="text"
-                        component={isResponsive ? responsiveRenderField : renderField}
-                        autoComplete="none"
-                        className={"form-control " + (isResponsive ? "" : "half-width")}
-                        placeholder="City"
-                        //validate={[required, emailPattern]}
-                        direction="left"
-                    />
-                    <Field 
-                        name="location.adress"
-                        type="text"
-                        component={isResponsive ? responsiveRenderField : renderField}
-                        autoComplete="none"
-                        className={"form-control " + (isResponsive ? "" : "half-width")}
-                        placeholder="Adress"
-                        //validate={[required, emailPattern]}
-                        direction="right"
-                    />
-                    <FormSection name="menu" component={(props) => (<>{props.children}</>)}>
-                        <Field  
-                            name="category"
-                            component={selectList}
-                            //autoComplete="none"
-                            values={categories}
-                            onChange={(e) => {
-                                menuObj[e.target.value] = []
-                            }}
+        <>
+            <Card className="text-center">
+                <Card.Header>Open a new restuarant</Card.Header>
+                <Card.Body>
+                    <form onSubmit={props.handleSubmit(onSubmit)}>
+                        <Field 
+                            name="name"
+                            type="text"
+                            component={isResponsive ? responsiveRenderField : renderField}
+                            autoComplete="none"
+                            className="form-control"
+                            placeholder="Name"
+                            //validate={[required, emailPattern]}
+                            direction="left"
                         />
-                        <MenuAdding changeFunc={(event, value, preValue, property) => {
-                            const objProp = property.replace(/(.*)\./,"")
-                            menuObj[objProp].push(value)
-                        }}/>
-                    </FormSection>
-                    <Button variant="primary" size="sm" type="submit" disabled={props.submitting}>
-                        {!props.submitting ? 'Add Restuarant' : loadingBtn}
-                    </Button>
-                </form>
-            </Card.Body>
-        </Card>
+                        <Field 
+                            name="location.city"
+                            type="text"
+                            component={isResponsive ? responsiveRenderField : renderField}
+                            autoComplete="none"
+                            className={"form-control " + (isResponsive ? "" : "half-width")}
+                            placeholder="City"
+                            //validate={[required, emailPattern]}
+                            direction="left"
+                        />
+                        <Field 
+                            name="location.adress"
+                            type="text"
+                            component={isResponsive ? responsiveRenderField : renderField}
+                            autoComplete="none"
+                            className={"form-control " + (isResponsive ? "" : "half-width")}
+                            placeholder="Adress"
+                            //validate={[required, emailPattern]}
+                            direction="right"
+                        />
+                        <FormSection name="menu" component={(props) => (<>{props.children}</>)}>
+                            <Field  
+                                name="category"
+                                component={selectList}
+                                //autoComplete="none"
+                                values={categories}
+                                onChange={(e) => {
+                                    menuObj[e.target.value] = {}
+                                }}
+                                clickEvent={()=>{
+                                    setModal(true)
+                                    setModalContant(
+                                        <>
+                                            <input placeholder="Type a category" name="category" type="text" className="form-control"/>
+                                        </>
+                                    )
+                                }}
+                            />
+                            <MenuAdding changeFunc={(event, value, preValue, property) => {
+                                const objProp = property.replace(/(.*)\./,"")
+                                menuObj[objProp][value] = null
+                            }}
+                                clickEvent={() => {
+                                    setModal(true)
+                                    setModalContant(
+                                        <>
+                                            <input placeholder="Type a city" name="location.city" type="text" className="form-control"/>
+                                            <input placeholder="Type an address" name="location.address" type="text" className="form-control"/>
+                                        </>
+                                    )
+                                }}/>
+                        </FormSection>
+                        <Button variant="primary" size="sm" type="submit" disabled={props.submitting}>
+                            {!props.submitting ? 'Add Restuarant' : loadingBtn}
+                        </Button>
+                    </form>
+                </Card.Body>
+            </Card>
+            <AddingItemModal 
+                show={showModal}
+                onHide={() =>{setModal(false); setModalContant()}}
+                contant={modalContant}
+            />
+        </>
     )
 }
 

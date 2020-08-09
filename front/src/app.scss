@@ -13,7 +13,7 @@
 
 }
 
-.fade {
+[role=alert]{
     opacity: .95 !important;
     transform: scaleY(0);
     transform-origin: top;
@@ -62,3 +62,4 @@
         border: 1px solid $dark-red-color;
     }
 }
+

@@ -19,7 +19,7 @@ function selectList(props) {
                     return (<option key={index} value={val}>{val}</option>)
                 })}
             </select>
-            <button>
+            <button type="button" onClick={props.clickEvent}>
                 {addContent}
             </button>
         </div>
@@ -41,6 +41,7 @@ function AddMenu(props) {
                 //autoComplete="none"
                 values={props.category ? vluse[props.category] : []}
                 onChange={props.changeFunc}
+                clickEvent={props.clickEvent}
             />
         </>
     )

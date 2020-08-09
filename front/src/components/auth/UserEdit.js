@@ -156,7 +156,10 @@ function UserEdit(props) {
                 validate={[required, mustBeLong2]}
                 direction="right"
             />
-            {/* Add field that will show user's restuaratns */}
+            {/* Add field that will show user's restuaratns,
+                on click of each resturant it will take him the the page /profile/:restuarantId
+                if the user doesn't own the restuarantId, it will redirect back to /profile.
+             */}
             <Button variant="primary" size="sm" type="submit" disabled={props.submitting}>
                 {!props.submitting ? 'Update' : loadingBtn}
             </Button>
