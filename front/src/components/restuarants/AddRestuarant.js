@@ -98,7 +98,8 @@ function AddRestuarant(props) {
     const [showModal, setModal] = useState(false)
     const [modalContant, setModalContant] = useState()
     const [menuObj] = useState({})
-    const categories = ["one", "two", "three"]
+    const [modalArr, setModalArr] = useState()
+    const [categories] = useState(["one", "two", "three"])
 
     const loadingBtn = <Spinner
                             as="span"
@@ -172,6 +173,7 @@ function AddRestuarant(props) {
                                             <input placeholder="Type a category" name="category" type="text" className="form-control"/>
                                         </>
                                     )
+                                    setModalArr(categories)
                                 }}
                             />
                             <MenuAdding changeFunc={(event, value, preValue, property) => {
@@ -198,6 +200,7 @@ function AddRestuarant(props) {
                 show={showModal}
                 onHide={() =>{setModal(false); setModalContant()}}
                 contant={modalContant}
+                arr={modalArr}
             />
         </>
     )

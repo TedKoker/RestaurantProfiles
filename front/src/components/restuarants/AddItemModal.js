@@ -34,13 +34,10 @@ function AddItemModal(props) {
                     const tempObj = {}
                     Array.from(modalBody.current.children).forEach(child => {
                         breakToProps(tempObj,child.name, child.value)
-                        //tempObj[child.name] = child.value
                     })
-                    console.log(tempObj)
-                    /**
-                     * Get all child elements of elements model.Body (use useRef for this),
-                     * and then check their value
-                     */
+                    // console.log(tempObj[Object.keys(tempObj)[0]])
+                    props.arr.push(tempObj[Object.keys(tempObj)[0]])
+                    props.onHide()
                 }}>Add</Button>
             </Modal.Footer>
         </Modal>
