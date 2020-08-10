@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Field, formValues } from 'redux-form'
 
 function adjustSpace(contant, fother, childString, args={}) {
-    console.log('in')
     let child = document.createElement(childString)
     let text = document.createTextNode(contant)
     child.append(text)
@@ -46,29 +45,20 @@ function selectList(props) {
                             <path fillRule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
                             <path fillRule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
                         </svg>
-    const header = (elm)=>{
-        const selectElm = document.getElementById("itemList")
-        if(selectElm){
-            console.log(selectElm)
-            const spacePixelRange = adjustSpace("\u00a0", selectElm, "option", {className: "list-header"})
-            console.log(spacePixelRange)
-            // const wordPixelRange = adjustSpace(val, selectElm, "option")
-            return (<option disabled className="list-header">Category</option>)
+    const header = ()=>{
+        if(props.select){
+            const spacePixelRange = adjustSpace("\u00a0", props.select, "option", {className: "list-header"})
+            const wordPixelRange = adjustSpace("Name", props.select, "option")
+            const number = Math.round(props.select.clientWidth/2/spacePixelRange -wordPixelRange / spacePixelRange)
+            return (<option disabled className="list-header">{seprateToColumns(["Name", "Price"], number)}</option>)
         }
     }
     /**If option is selected, there will be trash can near her to delete the option */
     return (
         <div className="list" id="list" style={{width: "100%"}}>
             <select size="8" id={"itemList"} className="form-control" style={{padding:0}} {...input}>
-                {/* {()=>{
-                    const selectElm = document.getElementById("itemList")
-                    const spacePixelRange = adjustSpace("\u00a0", selectElm, "option", {className: "list-header"})
-                    console.log(spacePixelRange)
-                    // const wordPixelRange = adjustSpace(val, selectElm, "option")
-                    return (<option disabled className="list-header">Category</option>)
-                }} */}
                 {header()}
-                <option disabled className="list-header">Category</option>
+                {/* <option disabled className="list-header">Category</option> */}
                 {props.values.map((val, index) => {
                     const selectElm = document.getElementById("itemList")
                     const spacePixelRange = adjustSpace("\u00a0", selectElm, "option")
@@ -91,11 +81,18 @@ function AddMenu(props) {
         three: ['haha', 'dsfsfdsf', 'dsfd sf', 'adaaaa']
     }
 
+    const [selectElm, setSelectElm] = useState()
+
+    useEffect(()=>{
+        setSelectElm(document.getElementById("itemList"))
+    },[])
+
     return (
         <>
             <Field 
                 name={props.category ? ""+props.category : "noName"}
                 component={selectList}
+                select={selectElm}
                 //autoComplete="none"
                 values={vluse[props.category] ? vluse[props.category] : []}
                 onChange={props.changeFunc}
