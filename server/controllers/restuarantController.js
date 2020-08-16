@@ -1,10 +1,10 @@
 const Restuarant = require("../models/Restuarant")
 
 exports.post = (req,res,next) => {
-    const {location, menu} = req.body
+    const {location, menu, name} = req.body
     const owner = req.user._id
     const restuarant = new Restuarant({
-        location, menu, owner
+        location, menu, owner, name
     })
     restuarant.save(err => {
         if(err) {

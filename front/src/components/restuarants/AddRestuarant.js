@@ -10,6 +10,7 @@ import Tooltip from 'react-bootstrap/Tooltip'
 
 import {RequireAuth} from '../../shared/sharedLogic/HocComponents'
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
+import {strToObj, arrToObj} from '../../shared/sharedLogic/sharedFuncs'
 import * as actions from '../../actions'
 import AddingItemModal from './AddItemModal'
 import MenuAdding from './MenuAdding'
@@ -99,7 +100,12 @@ function AddRestuarant(props) {
     const [modalContant, setModalContant] = useState()
     const [menuObj] = useState({})
     const [modalArr, setModalArr] = useState()
-    const [categories] = useState(["one", "two", "three"])
+    const [categories] = useState([]) //["one", "two", "three"]
+    const [menuItems] = useState({
+        one: [{name: 'hi', price: 32}],
+        two: [{name: "pitzza", price: 55}, {name: "pasts", price: 70}],
+        three: [{name: "humus", price: 13}, {name: "thina", price: 30}, {name: "salat", price: 44}, {name: "antipasti", price: 42}]
+    })
 
     const loadingBtn = <Spinner
                             as="span"
@@ -110,9 +116,10 @@ function AddRestuarant(props) {
                         />
 
     const onSubmit = (formProps) => {
-        /**map the menu object */
+        /**reset form props after sending to database */
         Object.keys(menuObj).forEach(key => {
-            menuObj[key] = Object.keys(menuObj[key])
+            const current = Object.keys(menuObj[key])
+            menuObj[key] =  Array.isArray(current) ? arrToObj(current) : strToObj(current)
         })
         formProps.menu = menuObj
         console.log(formProps)
@@ -121,6 +128,28 @@ function AddRestuarant(props) {
     useEffect(() => {
         setResponsive(winWidth < 767 ? true : false)
     },[winWidth])
+
+    useEffect(() => {
+        Object.defineProperty(categories, "push", {
+            value: function(val) {
+                if(menuObj[val] === undefined) {
+                    this[this.length] = val
+                    menuObj[val] = {}
+                    return val
+                }
+            }
+        })
+        Object.defineProperty(menuItems, "push", {
+            value: function(val) {
+                if(menuObj[val] !== undefined) {
+                    this[this.length] = val
+                    menuObj[val] = {}
+                    return val
+                }
+            }
+        })
+    }, [])
+
     return (
         <>
             <Card className="text-center">
@@ -163,9 +192,9 @@ function AddRestuarant(props) {
                                 component={selectList}
                                 //autoComplete="none"
                                 values={categories}
-                                onChange={(e) => {
-                                    menuObj[e.target.value] = {}
-                                }}
+                                // onChange={(e) => {
+                                //     menuObj[e.target.value] = {}
+                                // }}
                                 clickEvent={()=>{
                                     setModal(true)
                                     setModalContant(
@@ -178,16 +207,19 @@ function AddRestuarant(props) {
                             />
                             <MenuAdding changeFunc={(event, value, preValue, property) => {
                                 const objProp = property.replace(/(.*)\./,"")
-                                menuObj[objProp][value] = null
+                                menuObj[objProp][value] = value
                             }}
+                            arr={menuItems}
                                 clickEvent={() => {
                                     setModal(true)
                                     setModalContant(
                                         <>
-                                            <input placeholder="Type a city" name="location.city" type="text" className="form-control"/>
-                                            <input placeholder="Type an address" name="location.address" type="text" className="form-control"/>
+                                            <input placeholder="Type a name" name="item.name" type="text" className="form-control"/>
+                                            <input placeholder="Type an price" name="item.price" type="text" className="form-control"/>
                                         </>
                                     )
+                                    const category = document.getElementsByName("menu.category")[0].value
+                                    setModalArr(menuItems[category] ? menuItems[category] : menuItems[category] = [])
                                 }}/>
                         </FormSection>
                         <Button variant="primary" size="sm" type="submit" disabled={props.submitting}>

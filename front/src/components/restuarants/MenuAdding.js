@@ -62,9 +62,9 @@ function selectList(props) {
                 {props.values.map((val, index) => {
                     const selectElm = document.getElementById("itemList")
                     const spacePixelRange = adjustSpace("\u00a0", selectElm, "option")
-                    const wordPixelRange = adjustSpace(val, selectElm, "option")
+                    const wordPixelRange = adjustSpace(val.name, selectElm, "option")
                     const number = Math.round(selectElm.clientWidth/2/spacePixelRange -wordPixelRange / spacePixelRange)
-                    return (<option key={index} value={val} id={index}>{seprateToColumns([val, val], number)}</option>)
+                    return (<option key={index} value={`{name: ${val.name}, price: ${val.price}}`} id={index}>{seprateToColumns([val.name, val.price], number)}</option>)
                 })}
             </select>
             <button type="button" onClick={props.clickEvent}>
@@ -76,9 +76,9 @@ function selectList(props) {
 
 function AddMenu(props) {
     const vluse = {
-        one: ['hi, hi, hi'],
-        two: ['la', 'lal'],
-        three: ['haha', 'dsfsfdsf', 'dsfd sf', 'adaaaa']
+        one: [{name: 'hi', price: 32}],
+        two: [{name: "pitzza", price: 55}, {name: "pasts", price: 70}],
+        three: [{name: "humus", price: 13}, {name: "thina", price: 30}, {name: "salat", price: 44}, {name: "antipasti", price: 42}]
     }
 
     const [selectElm, setSelectElm] = useState()
@@ -94,7 +94,7 @@ function AddMenu(props) {
                 component={selectList}
                 select={selectElm}
                 //autoComplete="none"
-                values={vluse[props.category] ? vluse[props.category] : []}
+                values={props.arr[props.category] ? props.arr[props.category] : []}
                 onChange={props.changeFunc}
                 clickEvent={props.clickEvent}
                 forwardRef={false}
