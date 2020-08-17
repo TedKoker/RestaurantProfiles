@@ -35,7 +35,6 @@ function AddItemModal(props) {
                     Array.from(modalBody.current.children).forEach(child => {
                         breakToProps(tempObj,child.name, child.value)
                     })
-                    console.log(tempObj)
                     props.arr.push(tempObj[Object.keys(tempObj)[0]]) //[Object.keys(tempObj)[0]]
                     props.onHide()
                 }}>Add</Button>

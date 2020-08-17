@@ -58,7 +58,6 @@ function selectList(props) {
         <div className="list" id="list" style={{width: "100%"}}>
             <select size="8" id={"itemList"} className="form-control" style={{padding:0}} {...input}>
                 {header()}
-                {/* <option disabled className="list-header">Category</option> */}
                 {props.values.map((val, index) => {
                     const selectElm = document.getElementById("itemList")
                     const spacePixelRange = adjustSpace("\u00a0", selectElm, "option")
@@ -75,11 +74,6 @@ function selectList(props) {
 }
 
 function AddMenu(props) {
-    const vluse = {
-        one: [{name: 'hi', price: 32}],
-        two: [{name: "pitzza", price: 55}, {name: "pasts", price: 70}],
-        three: [{name: "humus", price: 13}, {name: "thina", price: 30}, {name: "salat", price: 44}, {name: "antipasti", price: 42}]
-    }
 
     const [selectElm, setSelectElm] = useState()
 

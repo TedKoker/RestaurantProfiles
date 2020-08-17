@@ -5,9 +5,15 @@ export function strToObj(str) {
 
     let fixStr = str.slice(1, str.length-1)
                     .split(",")
-                    .map(x=> x.split(":").map(y=>y.trim()).map(z=>`\"${z}\"`).join(":"))
+                    .map(x=> x.split(":").map(y=>y.trim()).map(z=>{
+                        if(z[0]==="\"" && z[z.length-1]==="\"") {
+                            return z
+                        } else {
+                            return `\"${z}\"`
+                        }
+                    }).join(":"))
                     .join(",")
-    
+    console.log(fixStr)
     return JSON.parse(`{${fixStr}}`)
 }
 
@@ -26,4 +32,15 @@ export function arrToObj(arr) {
             return strToObj(value)
         }
     })
+}
+
+export function stringToPropName (str) {
+    return str.trim()
+                .split(/ \s*/).map((value, index) => {
+                    if(index!==0) {
+                        return `${value[0].toUpperCase()}${value.substring(1)}`
+                    } else {
+                        return value
+                    }
+                }).join("")
 }

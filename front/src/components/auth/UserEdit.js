@@ -7,7 +7,6 @@ import Spinner from 'react-bootstrap/Spinner'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
-import RequireAuth from '../../shared/sharedLogic/HocComponents'
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
 import * as actions from '../../actions'
 import './auth.scss'

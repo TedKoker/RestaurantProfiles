@@ -1,21 +1,32 @@
 import React, {useState, useEffect, useRef} from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {reduxForm, Field, FormSection, formValues  , SubmissionError } from 'redux-form'
+import {reduxForm, Field, FormSection  } from 'redux-form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Spinner from 'react-bootstrap/Spinner'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
 
-import {RequireAuth} from '../../shared/sharedLogic/HocComponents'
 import {useWindowSize} from '../../shared/sharedLogic/useFunctions'
-import {strToObj, arrToObj} from '../../shared/sharedLogic/sharedFuncs'
+import {required, mustBeLength} from '../../shared/sharedLogic/fieldValidation'
+import {strToObj, arrToObj, stringToPropName} from '../../shared/sharedLogic/sharedFuncs'
+import {RequireAuth} from '../../shared/sharedLogic/HocComponents'
 import * as actions from '../../actions'
 import AddingItemModal from './AddItemModal'
 import MenuAdding from './MenuAdding'
 import '../auth/auth.scss'
 import '../../app.scss'
+
+/**
+ * ToDo:
+ * *******************
+ * 1) Add deleting option in each item of the menu
+ * 2) Fix the bug in "Name Price" list that do not show items imidiatly (only after click)
+ * 3) Connect form to database
+ */
+
+const requiredLengthOfTwo = mustBeLength(2)
 
 function renderField(props) {
     const {
@@ -79,7 +90,7 @@ function selectList(props) {
     /**If option is selected, there will be trash can near her to delete the option */
     return (
         <div className="list" style={{width: "100%"}}>
-            <select size="8" name="" className="form-control" style={{padding:0}} {...input}>
+            <select size="8" name="" className="form-control" ref={props.refProp} style={{padding:0}} {...input}>
                 <option disabled className="list-header">Category</option>
                 {props.values.map((val, index, array) => {
                     return (<option key={index} value={val}>{val}</option>)
@@ -100,12 +111,10 @@ function AddRestuarant(props) {
     const [modalContant, setModalContant] = useState()
     const [menuObj] = useState({})
     const [modalArr, setModalArr] = useState()
-    const [categories] = useState([]) //["one", "two", "three"]
-    const [menuItems] = useState({
-        one: [{name: 'hi', price: 32}],
-        two: [{name: "pitzza", price: 55}, {name: "pasts", price: 70}],
-        three: [{name: "humus", price: 13}, {name: "thina", price: 30}, {name: "salat", price: 44}, {name: "antipasti", price: 42}]
-    })
+    const [categories] = useState([])
+    const [menuItems] = useState({})
+
+    const categorySelect = useRef()
 
     const loadingBtn = <Spinner
                             as="span"
@@ -114,9 +123,10 @@ function AddRestuarant(props) {
                             role="status"
                             aria-hidden="true"
                         />
-
-    const onSubmit = (formProps) => {
+        
+        const onSubmit = (formProps) => {
         /**reset form props after sending to database */
+        console.log(menuObj)
         Object.keys(menuObj).forEach(key => {
             const current = Object.keys(menuObj[key])
             menuObj[key] =  Array.isArray(current) ? arrToObj(current) : strToObj(current)
@@ -132,23 +142,32 @@ function AddRestuarant(props) {
     useEffect(() => {
         Object.defineProperty(categories, "push", {
             value: function(val) {
-                if(menuObj[val] === undefined) {
+                const propName = stringToPropName(val)
+                if(menuObj[propName] === undefined) {
                     this[this.length] = val
-                    menuObj[val] = {}
-                    return val
-                }
-            }
-        })
-        Object.defineProperty(menuItems, "push", {
-            value: function(val) {
-                if(menuObj[val] !== undefined) {
-                    this[this.length] = val
-                    menuObj[val] = {}
+                    menuObj[propName] = {}
                     return val
                 }
             }
         })
     }, [])
+
+    useEffect(() => {
+        if(categories.length > 0) {
+            const prop = stringToPropName(categories[categories.length-1])
+            Object.defineProperty(menuItems, categories[categories.length-1], {
+                value: []
+            })
+            Object.defineProperty(menuItems[categories[categories.length-1]], "push", {
+                value: function(val) {
+                    const valStringify  = JSON.stringify(val)
+                    this[this.length] = val
+                    menuObj[prop][valStringify] = valStringify
+                    return val
+                }
+            })
+        }
+    },[categories.length])
 
     return (
         <>
@@ -163,7 +182,7 @@ function AddRestuarant(props) {
                             autoComplete="none"
                             className="form-control"
                             placeholder="Name"
-                            //validate={[required, emailPattern]}
+                            validate={[required, requiredLengthOfTwo]}
                             direction="left"
                         />
                         <Field 
@@ -173,7 +192,7 @@ function AddRestuarant(props) {
                             autoComplete="none"
                             className={"form-control " + (isResponsive ? "" : "half-width")}
                             placeholder="City"
-                            //validate={[required, emailPattern]}
+                            validate={[required, requiredLengthOfTwo]}
                             direction="left"
                         />
                         <Field 
@@ -183,18 +202,15 @@ function AddRestuarant(props) {
                             autoComplete="none"
                             className={"form-control " + (isResponsive ? "" : "half-width")}
                             placeholder="Adress"
-                            //validate={[required, emailPattern]}
+                            validate={[required, requiredLengthOfTwo]}
                             direction="right"
                         />
                         <FormSection name="menu" component={(props) => (<>{props.children}</>)}>
                             <Field  
                                 name="category"
+                                refProp={categorySelect}
                                 component={selectList}
-                                //autoComplete="none"
                                 values={categories}
-                                // onChange={(e) => {
-                                //     menuObj[e.target.value] = {}
-                                // }}
                                 clickEvent={()=>{
                                     setModal(true)
                                     setModalContant(
@@ -205,10 +221,7 @@ function AddRestuarant(props) {
                                     setModalArr(categories)
                                 }}
                             />
-                            <MenuAdding changeFunc={(event, value, preValue, property) => {
-                                const objProp = property.replace(/(.*)\./,"")
-                                menuObj[objProp][value] = value
-                            }}
+                            <MenuAdding 
                             arr={menuItems}
                                 clickEvent={() => {
                                     setModal(true)
