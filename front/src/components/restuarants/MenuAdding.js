@@ -66,7 +66,7 @@ function selectList(props) {
                     return (<option key={index} value={`{name: ${val.name}, price: ${val.price}}`} id={index}>{seprateToColumns([val.name, val.price], number)}</option>)
                 })}
             </select>
-            <button type="button" onClick={props.clickEvent}>
+            <button type="button" className="add-btn" onClick={props.clickEvent}>
                 {addContent}
             </button>
         </div>

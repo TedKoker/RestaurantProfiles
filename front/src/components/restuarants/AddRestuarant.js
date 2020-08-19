@@ -21,9 +21,11 @@ import '../../app.scss'
 /**
  * ToDo:
  * *******************
- * 1) Add deleting option in each item of the menu
+ * 1) Add deleting option in each item of the menu and edditing option (double click on the item)
  * 2) Fix the bug in "Name Price" list that do not show items imidiatly (only after click)
- * 3) Connect form to database
+ * 3) Disable the add button if no category was clicked
+ * 4) Connect form to database
+ * 5) Add validation in adding modal
  */
 
 const requiredLengthOfTwo = mustBeLength(2)
@@ -86,18 +88,39 @@ function selectList(props) {
                             <path fillRule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
                             <path fillRule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
                         </svg>
+    
+    const trashIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                      </svg>
+
+    const editIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-pencil" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z"/>
+                        <path fillRule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z"/>
+                    </svg>
 
     /**If option is selected, there will be trash can near her to delete the option */
     return (
-        <div className="list" style={{width: "100%"}}>
-            <select size="8" name="" className="form-control" ref={props.refProp} style={{padding:0}} {...input}>
+        <div className="list" ref={props.refProp} style={{width: "100%"}}>
+            <select size="8" className="form-control" style={{padding:0}} {...input}>
                 <option disabled className="list-header">Category</option>
                 {props.values.map((val, index, array) => {
-                    return (<option key={index} value={val}>{val}</option>)
+                    return (<option key={index} value={val} onClick={(e) => {
+                                const trashBtn = document.getElementsByClassName("delete-btn")
+                                const editBtn = document.getElementsByClassName("edit-btn")
+                                const yPoint = e.target.clientHeight*(index+1)
+                                trashBtn[0].style = editBtn[0].style =  `display: inline; top: ${yPoint+3}px`
+                            }}>{val}</option>)
                 })}
             </select>
-            <button type="button" onClick={props.clickEvent}>
+            <button type="button" className="add-btn" onClick={props.clickEvent}>
                 {addContent}
+            </button>
+            <button type="button" className="delete-btn" id="delete-btn">
+                {trashIcon}
+            </button>
+            <button type="button" className="edit-btn" id="edit-btn">
+                {editIcon}
             </button>
         </div>
     )
@@ -111,7 +134,7 @@ function AddRestuarant(props) {
     const [modalContant, setModalContant] = useState()
     const [menuObj] = useState({})
     const [modalArr, setModalArr] = useState()
-    const [categories] = useState([])
+    const [categories] = useState(["one", "two"])
     const [menuItems] = useState({})
 
     const categorySelect = useRef()
@@ -153,7 +176,7 @@ function AddRestuarant(props) {
     }, [])
 
     useEffect(() => {
-        if(categories.length > 0) {
+        if(categories.length > 0 && stringToPropName(categories[categories.length-1])) {
             const prop = stringToPropName(categories[categories.length-1])
             Object.defineProperty(menuItems, categories[categories.length-1], {
                 value: []
@@ -182,7 +205,7 @@ function AddRestuarant(props) {
                             autoComplete="none"
                             className="form-control"
                             placeholder="Name"
-                            validate={[required, requiredLengthOfTwo]}
+                            // validate={[required, requiredLengthOfTwo]}
                             direction="left"
                         />
                         <Field 
@@ -192,7 +215,7 @@ function AddRestuarant(props) {
                             autoComplete="none"
                             className={"form-control " + (isResponsive ? "" : "half-width")}
                             placeholder="City"
-                            validate={[required, requiredLengthOfTwo]}
+                            // validate={[required, requiredLengthOfTwo]}
                             direction="left"
                         />
                         <Field 
@@ -202,7 +225,7 @@ function AddRestuarant(props) {
                             autoComplete="none"
                             className={"form-control " + (isResponsive ? "" : "half-width")}
                             placeholder="Adress"
-                            validate={[required, requiredLengthOfTwo]}
+                            // validate={[required, requiredLengthOfTwo]}
                             direction="right"
                         />
                         <FormSection name="menu" component={(props) => (<>{props.children}</>)}>

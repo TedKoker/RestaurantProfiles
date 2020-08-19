@@ -38,6 +38,7 @@
                 }
             }
             .list {
+                $btn-right-position: 17px;
                 position: relative;
                 select {
                     .list-header {
@@ -45,22 +46,38 @@
                         color: $main-white-color;
                         font-size: 1.2rem;
                     }
-
-                    option {
-                        display: flex;
-                        justify-content: space-between;
-                    }
                 }
                 button {
                     position: absolute;
                     top: -8px;
-                    right: 17px;
+                    right: $btn-right-position;
                     margin: 0;
                     padding: 0;
+                }
+
+                .add-btn {
                     background: transparent;
                     border: none;
                     color: $main-white-color;
                     font-size: 1.5rem;
+                }
+
+                .delete-btn {
+                    background: transparent;
+                    border: none;
+                    color: $main-white-color;
+                    font-size: 1rem;
+                    display: none;
+                    right: $btn-right-position+4px;
+                }
+
+                .edit-btn {
+                    right: $btn-right-position+25px;
+                    background: transparent;
+                    border: none;
+                    color: $main-white-color;
+                    font-size: 1rem;
+                    display: none;
                 }
             }
             .error {
