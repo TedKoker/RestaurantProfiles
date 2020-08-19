@@ -105,7 +105,8 @@ function selectList(props) {
             <select size="8" className="form-control" style={{padding:0}} {...input}>
                 <option disabled className="list-header">Category</option>
                 {props.values.map((val, index, array) => {
-                    return (<option key={index} value={val} onClick={(e) => {
+                    return (<option key={index} value={val}
+                                 onClick={(e) => {
                                 const trashBtn = document.getElementsByClassName("delete-btn")
                                 const editBtn = document.getElementsByClassName("edit-btn")
                                 const yPoint = e.target.clientHeight*(index+1)
@@ -135,7 +136,9 @@ function AddRestuarant(props) {
     const [menuObj] = useState({})
     const [modalArr, setModalArr] = useState()
     const [categories] = useState(["one", "two"])
-    const [menuItems] = useState({})
+    const [menuItems] = useState({
+        one: [{name: "hello", price:40 }]
+    })
 
     const categorySelect = useRef()
 

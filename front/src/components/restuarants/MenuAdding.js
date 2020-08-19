@@ -45,6 +45,17 @@ function selectList(props) {
                             <path fillRule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
                             <path fillRule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
                         </svg>
+
+const trashIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+
+const editIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-pencil" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z"/>
+                    <path fillRule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z"/>
+                </svg>
+
     const header = ()=>{
         if(props.select){
             const spacePixelRange = adjustSpace("\u00a0", props.select, "option", {className: "list-header"})
@@ -63,12 +74,26 @@ function selectList(props) {
                     const spacePixelRange = adjustSpace("\u00a0", selectElm, "option")
                     const wordPixelRange = adjustSpace(val.name, selectElm, "option")
                     const number = Math.round(selectElm.clientWidth/2/spacePixelRange -wordPixelRange / spacePixelRange)
-                    return (<option key={index} value={`{name: ${val.name}, price: ${val.price}}`} id={index}>{seprateToColumns([val.name, val.price], number)}</option>)
+                    return (<option key={index} value={`{name: ${val.name}, price: ${val.price}}`} id={index}
+                                onClick={(e) => {
+                                    const trashBtn = document.getElementsByClassName("delete-btn")
+                                    const editBtn = document.getElementsByClassName("edit-btn")
+                                    const yPoint = e.target.clientHeight*(index+1)+document.getElementsByClassName("list")[0].offsetHeight
+                                    console.log(e.target.clientHeight, index+1)
+                                    trashBtn[0].style = editBtn[0].style =  `display: inline; top: ${yPoint+3}px`
+                                }}
+                            >{seprateToColumns([val.name, val.price], number)}</option>)
                 })}
             </select>
             <button type="button" className="add-btn" onClick={props.clickEvent}>
                 {addContent}
             </button>
+            {/* <button type="button" style={{backgroundColor: "black"}} className="delete-btn" id="delete-btn">
+                {trashIcon}
+            </button>
+            <button type="button" className="edit-btn" id="edit-btn">
+                {editIcon}
+            </button> */}
         </div>
     )
 }

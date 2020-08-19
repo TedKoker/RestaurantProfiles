@@ -41,10 +41,16 @@
                 $btn-right-position: 17px;
                 position: relative;
                 select {
+                    pointer-events: none;
+                    user-select: none;
                     .list-header {
                         background-color: $main-light-blue-color;
                         color: $main-white-color;
                         font-size: 1.2rem;
+                    }
+
+                    option {
+                        pointer-events: all;
                     }
                 }
                 button {
@@ -64,6 +70,7 @@
 
                 .delete-btn {
                     background: transparent;
+                    z-index: 1000;
                     border: none;
                     color: $main-white-color;
                     font-size: 1rem;
@@ -74,6 +81,7 @@
                 .edit-btn {
                     right: $btn-right-position+25px;
                     background: transparent;
+                    z-index: 1000;
                     border: none;
                     color: $main-white-color;
                     font-size: 1rem;
