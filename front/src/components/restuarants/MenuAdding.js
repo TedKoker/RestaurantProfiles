@@ -76,11 +76,10 @@ const editIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi
                     const number = Math.round(selectElm.clientWidth/2/spacePixelRange -wordPixelRange / spacePixelRange)
                     return (<option key={index} value={`{name: ${val.name}, price: ${val.price}}`} id={index}
                                 onClick={(e) => {
-                                    const trashBtn = document.getElementsByClassName("delete-btn")
-                                    const editBtn = document.getElementsByClassName("edit-btn")
-                                    const yPoint = e.target.clientHeight*(index+1)+document.getElementsByClassName("list")[0].offsetHeight
-                                    console.log(e.target.clientHeight, index+1)
-                                    trashBtn[0].style = editBtn[0].style =  `display: inline; top: ${yPoint+3}px`
+                                    const trashBtn = document.getElementById("item-delete")
+                                    const editBtn = document.getElementById("item-edit")
+                                    const yPoint = e.target.clientHeight*(index+1)
+                                    trashBtn.style = editBtn.style =  `display: inline; top: ${yPoint+3}px`
                                 }}
                             >{seprateToColumns([val.name, val.price], number)}</option>)
                 })}
@@ -88,12 +87,12 @@ const editIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi
             <button type="button" className="add-btn" onClick={props.clickEvent}>
                 {addContent}
             </button>
-            {/* <button type="button" style={{backgroundColor: "black"}} className="delete-btn" id="delete-btn">
+            <button type="button" className="delete-btn" id="item-delete">
                 {trashIcon}
             </button>
-            <button type="button" className="edit-btn" id="edit-btn">
+            <button type="button" className="edit-btn" id="item-edit">
                 {editIcon}
-            </button> */}
+            </button>
         </div>
     )
 }

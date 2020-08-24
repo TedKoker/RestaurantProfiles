@@ -117,10 +117,10 @@ function selectList(props) {
             <button type="button" className="add-btn" onClick={props.clickEvent}>
                 {addContent}
             </button>
-            <button type="button" className="delete-btn" id="delete-btn">
+            <button type="button" className="delete-btn" onClick={(e)=>props.deleteEvent(e)} id="delete-btn">
                 {trashIcon}
             </button>
-            <button type="button" className="edit-btn" id="edit-btn">
+            <button type="button" className="edit-btn" onClick={(e)=> {props.clickEvent(e, true)}} id="edit-btn">
                 {editIcon}
             </button>
         </div>
@@ -135,9 +135,11 @@ function AddRestuarant(props) {
     const [modalContant, setModalContant] = useState()
     const [menuObj] = useState({})
     const [modalArr, setModalArr] = useState()
-    const [categories] = useState(["one", "two"])
+    const [categories] = useState(["disert", "first", "main"])
     const [menuItems] = useState({
-        one: [{name: "hello", price:40 }]
+        main: [{name: "salat", price:40 }],
+        disert: [{name: "salat", price:40 }],
+        first: []
     })
 
     const categorySelect = useRef()
@@ -176,9 +178,12 @@ function AddRestuarant(props) {
                 }
             }
         })
+        
     }, [])
 
+
     useEffect(() => {
+        /**Execute only when the last index is an empty object */
         if(categories.length > 0 && stringToPropName(categories[categories.length-1])) {
             const prop = stringToPropName(categories[categories.length-1])
             Object.defineProperty(menuItems, categories[categories.length-1], {
@@ -194,6 +199,29 @@ function AddRestuarant(props) {
             })
         }
     },[categories.length])
+
+    useEffect(() => {
+        if(!showModal) {
+            if(Object.keys(menuItems).length === categories.length) {
+                let tempObj = {}
+                let changedValue
+                categories.forEach((value) => {
+                    tempObj[value] = menuItems[value]
+                    if(tempObj[value] === undefined) {
+                        changedValue = value
+                    }
+                })
+                Object.keys(menuItems).forEach(value => {
+                    if(tempObj[value] === undefined && menuItems[value] !== undefined) {
+                        if(changedValue) {
+                            menuItems[changedValue] = menuItems[value]
+                        }
+                        delete menuItems[value]
+                    }
+                })
+            }
+        }
+    },[showModal])
 
     return (
         <>
@@ -237,14 +265,26 @@ function AddRestuarant(props) {
                                 refProp={categorySelect}
                                 component={selectList}
                                 values={categories}
-                                clickEvent={()=>{
+                                clickEvent={(e, edit)=>{
+                                    const mainDiv = e.target.closest("div")
+                                    const currentValue = mainDiv.getElementsByTagName("select")[0].value
+                                    //subtracing 1 from the index becouse the first option in the select list is the title
+                                    const index = mainDiv.getElementsByTagName("select")[0].selectedIndex - 1
                                     setModal(true)
                                     setModalContant(
                                         <>
-                                            <input placeholder="Type a category" name="category" type="text" className="form-control"/>
+                                            <input placeholder="Type a category" name="category" type="text" defaultValue={edit ? currentValue : ""} className="form-control" />
                                         </>
                                     )
-                                    setModalArr(categories)
+                                    setModalArr({arr: categories, index: edit ? index : null})
+                                }}
+                                deleteEvent={(e)=>{
+                                    const mainDiv = e.target.closest("div")
+                                    const currentValue = mainDiv.getElementsByTagName("select")[0].value
+                                    //subtracing 1 from the index becouse the first option in the select list is the title
+                                    const index = mainDiv.getElementsByTagName("select")[0].selectedIndex - 1
+                                    categories.splice(index,1)
+                                    console.log(categories)
                                 }}
                             />
                             <MenuAdding 
@@ -269,7 +309,7 @@ function AddRestuarant(props) {
             </Card>
             <AddingItemModal 
                 show={showModal}
-                onHide={() =>{setModal(false); setModalContant()}}
+                onHide={() =>{setModal(false); setModalContant(); setModalArr()}}
                 contant={modalContant}
                 arr={modalArr}
             />

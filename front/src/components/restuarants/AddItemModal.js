@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 
@@ -35,7 +35,11 @@ function AddItemModal(props) {
                     Array.from(modalBody.current.children).forEach(child => {
                         breakToProps(tempObj,child.name, child.value)
                     })
-                    props.arr.push(tempObj[Object.keys(tempObj)[0]]) //[Object.keys(tempObj)[0]]
+                    if(props.arr.index !== null) {
+                        props.arr.arr[props.arr.index] = tempObj[Object.keys(tempObj)[0]]
+                    } else {
+                        props.arr.arr.push(tempObj[Object.keys(tempObj)[0]])
+                    }
                     props.onHide()
                 }}>Add</Button>
             </Modal.Footer>
