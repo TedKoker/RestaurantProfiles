@@ -87,10 +87,10 @@ const editIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi
             <button type="button" className="add-btn" onClick={props.clickEvent}>
                 {addContent}
             </button>
-            <button type="button" className="delete-btn" id="item-delete">
+            <button type="button" className="delete-btn" id="item-delete" onClick={(e)=>{props.deletEvent(e)}}>
                 {trashIcon}
             </button>
-            <button type="button" className="edit-btn" id="item-edit">
+            <button type="button" className="edit-btn" id="item-edit" onClick={(e)=> props.clickEvent(e, true)}>
                 {editIcon}
             </button>
         </div>
@@ -116,6 +116,7 @@ function AddMenu(props) {
                 onChange={props.changeFunc}
                 clickEvent={props.clickEvent}
                 forwardRef={false}
+                deletEvent={props.deletEvent}
             />
         </>
     )

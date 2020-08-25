@@ -35,10 +35,12 @@ function AddItemModal(props) {
                     Array.from(modalBody.current.children).forEach(child => {
                         breakToProps(tempObj,child.name, child.value)
                     })
-                    if(props.arr.index !== null) {
+                    if(props.arr.index !== null && props.arr.index !== undefined) {
                         props.arr.arr[props.arr.index] = tempObj[Object.keys(tempObj)[0]]
-                    } else {
+                    } else if(props.arr.arr !==undefined){
                         props.arr.arr.push(tempObj[Object.keys(tempObj)[0]])
+                    } else {
+                        props.arr.push(tempObj[Object.keys(tempObj)[0]])
                     }
                     props.onHide()
                 }}>Add</Button>

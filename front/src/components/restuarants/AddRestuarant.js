@@ -102,7 +102,7 @@ function selectList(props) {
     /**If option is selected, there will be trash can near her to delete the option */
     return (
         <div className="list" ref={props.refProp} style={{width: "100%"}}>
-            <select size="8" className="form-control" style={{padding:0}} {...input}>
+            <select size="8" className="form-control" style={{padding:0}} {...input} autoFocus>
                 <option disabled className="list-header">Category</option>
                 {props.values.map((val, index, array) => {
                     return (<option key={index} value={val}
@@ -129,7 +129,9 @@ function selectList(props) {
 
 function AddRestuarant(props) {
 
+    const [dummyValue ,forceUpdate] = useState(false)
     const [winWidth] = useWindowSize()
+
     const [isResponsive, setResponsive] = useState(winWidth < 767 ? true : false)
     const [showModal, setModal] = useState(false)
     const [modalContant, setModalContant] = useState()
@@ -183,8 +185,7 @@ function AddRestuarant(props) {
 
 
     useEffect(() => {
-        /**Execute only when the last index is an empty object */
-        if(categories.length > 0 && stringToPropName(categories[categories.length-1])) {
+        if(categories.length > 0 && stringToPropName(categories[categories.length-1]) && categories[categories.length-1]===undefined) {
             const prop = stringToPropName(categories[categories.length-1])
             Object.defineProperty(menuItems, categories[categories.length-1], {
                 value: []
@@ -283,23 +284,40 @@ function AddRestuarant(props) {
                                     const currentValue = mainDiv.getElementsByTagName("select")[0].value
                                     //subtracing 1 from the index becouse the first option in the select list is the title
                                     const index = mainDiv.getElementsByTagName("select")[0].selectedIndex - 1
+                                    delete menuItems[currentValue]
                                     categories.splice(index,1)
-                                    console.log(categories)
+                                    forceUpdate(!dummyValue)
                                 }}
                             />
                             <MenuAdding 
-                            arr={menuItems}
-                                clickEvent={() => {
+                                arr={menuItems}
+                                clickEvent={(e, edit) => {
+                                    const mainDiv = e.target.closest("div")
+                                    const currentValue = strToObj(mainDiv.getElementsByTagName("select")[0].value)
+                                    //subtracing 1 from the index becouse the first option in the select list is the title
+                                    const index = mainDiv.getElementsByTagName("select")[0].selectedIndex - 1
                                     setModal(true)
                                     setModalContant(
                                         <>
-                                            <input placeholder="Type a name" name="item.name" type="text" className="form-control"/>
-                                            <input placeholder="Type an price" name="item.price" type="text" className="form-control"/>
+                                            <input placeholder="Type a name" name="item.name" type="text"  defaultValue={edit ? currentValue.name : ""} className="form-control"/>
+                                            <input placeholder="Type an price" name="item.price" type="text"  defaultValue={edit ? currentValue.price : ""} className="form-control"/>
                                         </>
                                     )
                                     const category = document.getElementsByName("menu.category")[0].value
-                                    setModalArr(menuItems[category] ? menuItems[category] : menuItems[category] = [])
-                                }}/>
+                                    setModalArr({
+                                        arr: menuItems[category] ? menuItems[category] : menuItems[category] = [],
+                                        index: edit ? index : null
+                                    })
+                                }}
+                                deletEvent={(e)=>{
+                                    const mainDiv = e.target.closest("div")
+                                    //subtracing 1 from the index becouse the first option in the select list is the title
+                                    const index = mainDiv.getElementsByTagName("select")[0].selectedIndex - 1
+                                    const categoryName = categorySelect.current.children[0].value
+                                    menuItems[categoryName].splice(index,1)
+                                    forceUpdate(!dummyValue)
+                                }}
+                                />
                         </FormSection>
                         <Button variant="primary" size="sm" type="submit" disabled={props.submitting}>
                             {!props.submitting ? 'Add Restuarant' : loadingBtn}
