@@ -21,11 +21,10 @@ import '../../app.scss'
 /**
  * ToDo:
  * *******************
- * 1) Add deleting option in each item of the menu and edditing option (double click on the item)
- * 2) Fix the bug in "Name Price" list that do not show items imidiatly (only after click)
- * 3) Disable the add button if no category was clicked
+ * 1) Add validation to modal - done
+ * 2) Fix pixal ration (in smaller screen in the Name Price selection, it is not shown properly)
+ * 3) Fix CSS
  * 4) Connect form to database
- * 5) Add validation in adding modal
  */
 
 const requiredLengthOfTwo = mustBeLength(2)
@@ -129,7 +128,7 @@ function selectList(props) {
 
 function AddRestuarant(props) {
 
-    const [dummyValue ,forceUpdate] = useState(false)
+    const [dummyValue ,forceUpdate] = useState(false) // The dummyValue has no meaning, it just to rerender the component when I need to
     const [winWidth] = useWindowSize()
 
     const [isResponsive, setResponsive] = useState(winWidth < 767 ? true : false)
@@ -180,7 +179,6 @@ function AddRestuarant(props) {
                 }
             }
         })
-        
     }, [])
 
 
@@ -291,6 +289,7 @@ function AddRestuarant(props) {
                             />
                             <MenuAdding 
                                 arr={menuItems}
+                                disableBtn={categories.length===0}
                                 clickEvent={(e, edit) => {
                                     const mainDiv = e.target.closest("div")
                                     const currentValue = strToObj(mainDiv.getElementsByTagName("select")[0].value)

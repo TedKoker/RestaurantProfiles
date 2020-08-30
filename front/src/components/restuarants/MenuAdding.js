@@ -9,14 +9,18 @@ function adjustSpace(contant, fother, childString, args={}) {
         child[prop] = args[prop]
     })
     fother.appendChild(child)
-    const textSize = window.getComputedStyle(child).getPropertyValue("font-size")
+    let textSize = window.getComputedStyle(child).getPropertyValue("font-size")
     child.remove()
     let span = document.createElement("span")
     span.style.fontSize=textSize
     span.append(document.createTextNode(contant))
+    const currentPxRatio = window.devicePixelRatio
+    document.body.style.zoom = 1 - (currentPxRatio - 1)
     document.body.appendChild(span)
     const width = span.offsetWidth
     span.remove()
+    document.body.style.zoom = currentPxRatio
+    // document.body.style.zoom=3.0
     return width
 }
 
@@ -27,9 +31,7 @@ function seprateToColumns(worlds = [], spaceBetween) {
     if(!spaceBetween) {
         throw new Error("seprateToColumns must recive a number as spaceBetween")
     }
-
     let space = ""
-
     for(let i=0; i<spaceBetween; i++) {
         space += "\u00a0"
     }
@@ -58,9 +60,10 @@ const editIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi
 
     const header = ()=>{
         if(props.select){
+            // window.devicePixelRatio=1
             const spacePixelRange = adjustSpace("\u00a0", props.select, "option", {className: "list-header"})
-            const wordPixelRange = adjustSpace("Name", props.select, "option")
-            const number = Math.round(props.select.clientWidth/2/spacePixelRange -wordPixelRange / spacePixelRange)
+            const wordPixelRange = adjustSpace("Name", props.select, "option", {className: "list-header"})
+            const number = Math.ceil(props.select.clientWidth/2/spacePixelRange -wordPixelRange / spacePixelRange)
             return (<option disabled className="list-header">{seprateToColumns(["Name", "Price"], number)}</option>)
         }
     }
@@ -73,7 +76,8 @@ const editIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi
                     const selectElm = document.getElementById("itemList")
                     const spacePixelRange = adjustSpace("\u00a0", selectElm, "option")
                     const wordPixelRange = adjustSpace(val.name, selectElm, "option")
-                    const number = Math.round(selectElm.clientWidth/2/spacePixelRange -wordPixelRange / spacePixelRange)
+                    const number = Math.ceil(selectElm.clientWidth/2/spacePixelRange -wordPixelRange / spacePixelRange)-2 
+                    // console.log(wordPixelRange)
                     return (<option key={index} value={`{name: ${val.name}, price: ${val.price}}`} id={index}
                                 onClick={(e) => {
                                     const trashBtn = document.getElementById("item-delete")
@@ -84,7 +88,7 @@ const editIcon = <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi
                             >{seprateToColumns([val.name, val.price], number)}</option>)
                 })}
             </select>
-            <button type="button" className="add-btn" onClick={props.clickEvent}>
+            <button type="button" className="add-btn" onClick={props.clickEvent} disabled={props.disableBtn}>
                 {addContent}
             </button>
             <button type="button" className="delete-btn" id="item-delete" onClick={(e)=>{props.deletEvent(e)}}>
@@ -117,6 +121,7 @@ function AddMenu(props) {
                 clickEvent={props.clickEvent}
                 forwardRef={false}
                 deletEvent={props.deletEvent}
+                disableBtn={props.disableBtn}
             />
         </>
     )

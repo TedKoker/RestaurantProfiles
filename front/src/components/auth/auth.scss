@@ -43,6 +43,7 @@
                 select {
                     pointer-events: none;
                     user-select: none;
+                    -webkit-appearance: menulist-textfield;
                     .list-header {
                         background-color: $main-light-blue-color;
                         color: $main-white-color;

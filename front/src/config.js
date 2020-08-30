@@ -1,4 +1,4 @@
-export const serverUrl = "http://localhost:3090"
+export const serverUrl = "http://10.0.0.13:3090"
 
 export const controllers = {
     signin: `${serverUrl}/signin`,
