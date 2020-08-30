@@ -15,11 +15,12 @@ function adjustSpace(contant, fother, childString, args={}) {
     span.style.fontSize=textSize
     span.append(document.createTextNode(contant))
     const currentPxRatio = window.devicePixelRatio
+    const currentZoom = document.body.style.zoom
     document.body.style.zoom = 1 - (currentPxRatio - 1)
     document.body.appendChild(span)
     const width = span.offsetWidth
     span.remove()
-    document.body.style.zoom = currentPxRatio
+    document.body.style.zoom = currentZoom
     // document.body.style.zoom=3.0
     return width
 }
